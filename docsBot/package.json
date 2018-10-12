@@ -1,0 +1,17 @@
+{
+  "name": "roblox-api-bot",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RbxAPI/Docs-Bot.git"
+  },
+  "author": "LordHammy <LordHammy#3802>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.3.2"
+  }
+}
