@@ -38,7 +38,7 @@ bot.on("message", async message => {
     .setTitle('Current Libraries')
     .setDescription("Below is a list of all libraries publicised on this server sorted by language.")
     .addField('Python', 'Pyblox - https://github.com/Sanjay-B/Pyblox \nRobloxlib - https://github.com/NoahCristino/robloxlib')
-    .addField('Node.js', 'bloxy - https://github.com/MartinRBX/bloxy \nnoblox.js - https://github.com/suufi/roblox.js \nroblox-js - https://github.com/sentanos/roblox-js')
+    .addField('Node.js', 'bloxy - https://github.com/MartinRBX/bloxy \nnoblox.js - https://github.com/suufi/noblox.js \nroblox-js - https://github.com/sentanos/roblox-js')
     .addField('Lua', 'RobloxCommunication - https://github.com/CrescentCode/RobloxCommunication')
     .addField('C#', 'RobloxAPI - https://github.com/gamenew09/RobloxAPI')
     .addField('PHP', 'Roblophp - https://github.com/WebDevTrop/roblophp')
