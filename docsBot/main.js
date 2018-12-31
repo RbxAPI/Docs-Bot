@@ -18,7 +18,7 @@ bot.on("message", async message => {
     let sentMessage = await message.channel.send("Ping?");
     sentMessage.edit(`The ping is currently ${sentMessage.createdTimestamp - message.createdTimestamp}ms.`);
   }
-
+//d
   if(command === "codeblocks" || command === "codeblock") {
     message.channel.send("Codeblocks are used to send your code in a message with a clean aesthetic, making it easier to read and format. \n```js\n print('Here is an example of a codeblock.')```\n Here is how to use a codeblock:", {code: false})
     message.channel.send("\```lua\n print('Here is an example of a codeblock.')\``` ", {code: true})
