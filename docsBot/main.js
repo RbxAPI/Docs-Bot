@@ -40,6 +40,7 @@ bot.on("message", async message => {
     .addField('Python', 'Pyblox - https://github.com/Sanjay-B/Pyblox \nRobloxlib - https://github.com/NoahCristino/robloxlib \nRobloxapi - https://github.com/iranathan/robloxapi')
     .addField('Node.js', 'bloxy - https://github.com/MartinRBX/bloxy \nnoblox.js - https://github.com/suufi/noblox.js \nroblox-js - https://github.com/sentanos/roblox-js')
     .addField('Lua', 'RobloxCommunication - https://github.com/CrescentCode/RobloxCommunication')
+    .addField('C++', 'cblox - https://github.com/Meqolo/cblox'
     .addField('C#', 'RobloxAPI - https://github.com/gamenew09/RobloxAPI')
     .addField('PHP', 'Roblophp - https://github.com/WebDevTrop/roblophp')
     .addField('Java', 'Javablox - https://github.com/Pythonic-Rainbow/Javablox \nRoblox4j - https://github.com/PizzaCrust/Roblox4j')
