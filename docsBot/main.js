@@ -4,7 +4,7 @@ let config = require("./config.json");
 
 bot.on("ready", () => {
   console.log(`Bot started.`); 
-  bot.user.setActivity(`Watching`, `noobs!`);
+  bot.user.setActivity(`noobs!`, {type: `WATCHING`});
 });
 
 bot.on("message", async message => {
