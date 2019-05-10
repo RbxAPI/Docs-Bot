@@ -17,6 +17,7 @@ bot.on("message", async message => {
   if(command === "ping") {
     let sentMessage = await message.channel.send("Ping?");
     sentMessage.edit(`The ping is currently ${sentMessage.createdTimestamp - message.createdTimestamp}ms.`);
+    sendMessage.delete()
   }
 //d
   if(command === "codeblocks" || command === "codeblock") {
