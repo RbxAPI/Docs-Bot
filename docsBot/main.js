@@ -55,7 +55,7 @@ bot.on("message", async message => {
     .addField('Lua', 'Learning Lua - http://www.lua.org/pil/contents.html \nRoblox Developer Hub - https://www.robloxdev.com/resources \nRoblox API Reference - https://www.robloxdev.com/api-reference')
     .addField('JavaScript', 'Learning Javascript - https://www.codecademy.com/learn/learn-javascript \nJavascript Intro - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction')
     .addField('Python', 'Learning Python - https://www.codecademy.com/learn/learn-python \nPython Intro - https://wiki.python.org/moin/BeginnersGuide')
-    .addField('Java', 'Learning Java - https://docs.oracle.com/javase/tutorial/ \nJava Intro - https://www.ibm.com/developerworks/java/tutorials/j-introtojava1/index.html')
+    .addField('Java', 'Learning Java -  https://www.codecademy.com/learn/learn-java \nJava Intro - https://docs.oracle.com/javase/tutorial/')
     message.channel.send(codeBlock);
   }
   
