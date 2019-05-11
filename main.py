@@ -7,12 +7,13 @@ import docstoken
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?',description=description)
 bot.remove_command("help")
-repo_list = Auto.get_repo_list()
+repo_list = None
 
 @bot.event
 async def on_ready():
 	print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
 	print("--")
+	repo_list = await Auto.get_repo_list()
 
 @bot.command()
 async def list(ctx):

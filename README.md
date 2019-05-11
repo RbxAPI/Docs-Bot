@@ -15,4 +15,4 @@ To launch your own instance of the bot, create `docstoken.py` in this directory 
    ```
    where `Token` is your own [Bot's token](https://discordapp.com/developers/applications/).
 
-**NOTE:** No one should push this `docstoken.py` to to upstream. This is treated as local configuration.
+**NOTE:** No one should push `docstoken.py` to upstream. This is treated as local configuration.
