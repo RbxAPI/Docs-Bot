@@ -14,7 +14,7 @@ async def on_ready():
 
 @bot.command()
 async def list(ctx):
-	print(repo_list)
+	'''Generate server library list'''
 	embed = discord.Embed(title="Roblox API - Library List",description="General library list specific to this server",color=0xFFFFFF)
 	for repo in repo_list:
 		embed.add_field(name=repo_list[repo]["name"],value=repo_list[repo]["link"],inline=False)
