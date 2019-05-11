@@ -5,6 +5,7 @@ from utils import *
 
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?',description=description)
+bot.remove_command("help")
 repo_list = Auto.get_repo_list()
 
 @bot.event
