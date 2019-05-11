@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 from utils import *
+import docstoken
 
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?',description=description)
@@ -10,7 +11,7 @@ repo_list = Auto.get_repo_list()
 
 @bot.event
 async def on_ready():
-	print("Logged in as "+str(bot.user.name)+", id: "+str(bot.user.id))
+	print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
 	print("--")
 
 @bot.command()
@@ -24,4 +25,4 @@ async def list(ctx):
 
 
 if __name__ == "__main__":
-	bot.run("Token")
+	bot.run(docstoken.discord)
