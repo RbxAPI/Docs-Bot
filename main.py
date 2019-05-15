@@ -21,6 +21,26 @@ async def on_ready():
     await bot.change_presence(activity=activity)
 
 
+@bot.event
+async def on_command(ctx):
+    m = f"{ctx.message.content} ::: @{ctx.message.author.name}({ctx.message.author.id}) #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
+    print(m)
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.errors.CommandNotFound):
+        await ctx.send(str(error))
+    elif isinstance(error, commands.errors.MissingRequiredArgument):
+        x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
+        misarg = f"Missing argument:`{error.param.name}`. Check ``q!help {x}``!"
+        await ctx.send(misarg)
+    elif isinstance(error, discord.errors.Forbidden):
+        pass
+    else:
+        await ctx.send("An unknown error occured.")
+
+
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
