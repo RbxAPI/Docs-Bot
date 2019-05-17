@@ -1,3 +1,1 @@
-{
-  'token': 'token here'
-}
+discord = 'Token here'
