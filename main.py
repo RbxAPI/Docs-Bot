@@ -109,4 +109,4 @@ async def resources(ctx):
     await ctx.send(embed=emb)
 
 if __name__ == "__main__":
-    bot.run(docstoken.token)
+    bot.run(docstoken.discord)
