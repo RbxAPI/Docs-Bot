@@ -75,6 +75,20 @@ async def codeblock(ctx):
                                                       "-code-blocks#syntax-highlighting")
     await ctx.send(embed=emb)
 
+@bot.command()
+async def robloxdocs(ctx, doc: str, version: str):
+    url = f'https://{doc}.roblox.com/docs/json/{version}'
+    r = requests.get(url)
+    data = json.loads(r.text)
+    embed = discord.Embed(title=data['info']['title'])
+    for name, value in data['paths'].items():
+        method = list(value.items())[0][0]
+        roblox = value[method]
+        embed_value = roblox['summary'] + ' ' + method + '\n\n**Parameters**\n'
+        for parameter in roblox['parameters']:
+            embed_value += parameter['name'] + ': ' + parameter.get('description') or 'No description' + '\n'
+        embed.add_field(name=method.upper() + ' ' + name, value=embed_value, inline=True)
+    await ctx.send(embed=embed)
 
 @bot.command(aliases=["apisites", "robloxapi"])
 async def api(ctx):
