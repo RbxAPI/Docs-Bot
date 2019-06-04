@@ -4,6 +4,9 @@ from discord.ext import commands
 import docstoken
 from utils import *
 
+import requests
+import json
+
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?', description=description)
 bot.remove_command("help")
