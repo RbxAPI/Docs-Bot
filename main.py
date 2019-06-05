@@ -36,12 +36,13 @@ async def on_command_error(ctx, error):
         await ctx.send(str(error))
     elif isinstance(error, commands.errors.MissingRequiredArgument):
         x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
-        misarg = f"Missing argument:`{error.param.name}`. Check ``q!help {x}``!"
+        misarg = f"Missing argument:`{error.param.name}`. Check ``{bot.command_prefix}help {x}``!"
         await ctx.send(misarg)
     elif isinstance(error, discord.errors.Forbidden):
         pass
     else:
         await ctx.send("An unknown error occured.")
+        raise error
 
 
 @bot.command(aliases=["libs", "libraries", "librarylist"])
@@ -78,6 +79,7 @@ async def codeblock(ctx):
                                                       "-code-blocks#syntax-highlighting")
     await ctx.send(embed=emb)
 
+
 @bot.command()
 async def robloxdocs(ctx, doc: str, version: str):
     url = f'https://{doc}.roblox.com/docs/json/{version}'
@@ -85,13 +87,14 @@ async def robloxdocs(ctx, doc: str, version: str):
     data = json.loads(r.text)
     embed = discord.Embed(title=data['info']['title'])
     for name, value in data['paths'].items():
-        method = list(value.items())[0][0]
+        method = [*value.items()][0][0]
         roblox = value[method]
         embed_value = roblox['summary'] + ' ' + method + '\n\n**Parameters**\n'
         for parameter in roblox['parameters']:
             embed_value += parameter['name'] + ': ' + parameter.get('description') or 'No description' + '\n'
         embed.add_field(name=method.upper() + ' ' + name, value=embed_value, inline=True)
     await ctx.send(embed=embed)
+
 
 @bot.command(aliases=["apisites", "robloxapi"])
 async def api(ctx):
@@ -124,6 +127,7 @@ async def resources(ctx):
                   value='Learning Java - https://www.codecademy.com/learn/learn-java \nJava Intro - '
                         'https://docs.oracle.com/javase/tutorial/')
     await ctx.send(embed=emb)
+
 
 if __name__ == "__main__":
     bot.run(docstoken.discord)
