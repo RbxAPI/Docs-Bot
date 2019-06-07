@@ -44,7 +44,7 @@ async def on_command_error(ctx, error):
         await ctx.send("An unknown error occured.")
         raise error
 
-
+"""
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
@@ -53,6 +53,7 @@ async def list(ctx):
     for repo in repo_list:
         embed.add_field(name=repo_list[repo]["name"], value=repo_list[repo]["link"], inline=False)
     await ctx.send(embed=embed)
+"""
 
 
 @bot.command()
