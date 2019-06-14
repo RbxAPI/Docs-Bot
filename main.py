@@ -26,25 +26,42 @@ async def on_ready():
 
 @bot.event
 async def on_command(ctx):
-    m = f"{ctx.message.content} ::: @{ctx.message.author.name}({ctx.message.author.id}) #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        m = f"“DM-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})"
+    else:
+        m = f"“Text-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})" \
+            " #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
 
 
 @bot.event
 async def on_command_error(ctx, error):
+    dm = ctx.author.dm_channel
+    if dm is None:
+        dm = await ctx.author.create_dm()
     if isinstance(error, commands.errors.CommandNotFound):
-        await ctx.send(str(error))
+        await dm.send(str(error))
     elif isinstance(error, commands.errors.MissingRequiredArgument):
-        x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
-        misarg = f"Missing argument:`{error.param.name}`. Check ``{bot.command_prefix}help {x}``!"
-        await ctx.send(misarg)
+        # Remove "Check help" message because help command is disabled.
+        # x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
+        misarg = f"Missing argument:`{error.param.name}`."  # Check ``{bot.command_prefix}help {x}``!
+        await dm.send(misarg)
     elif isinstance(error, discord.errors.Forbidden):
         pass
+    elif isinstance(error, commands.errors.CommandInvokeError):
+        if isinstance(error.original, requests.exceptions.ConnectionError):
+            # We can catch inside ?robloxdocs but this will catch in a more generic way so in the future it still works
+            await dm.send("Connection can't be established. Maybe you have entered invalid parameters?")
+        else:
+            await dm.send(f"An unknown error occurred during command execution: {error.original}")
+            # Raise error or error.original?
+            raise error
     else:
-        await ctx.send("An unknown error occured.")
+        await dm.send("An unknown error occurred.")
         raise error
 
-"""
+
+'''
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
@@ -53,7 +70,7 @@ async def list(ctx):
     for repo in repo_list:
         embed.add_field(name=repo_list[repo]["name"], value=repo_list[repo]["link"], inline=False)
     await ctx.send(embed=embed)
-"""
+'''
 
 
 @bot.command()
@@ -81,6 +98,7 @@ async def codeblock(ctx):
     await ctx.send(embed=emb)
 
 
+# Let's make this async one day
 @bot.command()
 async def robloxdocs(ctx, doc: str, version: str):
     url = f'https://{doc}.roblox.com/docs/json/{version}'
