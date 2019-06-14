@@ -26,23 +26,28 @@ async def on_ready():
 
 @bot.event
 async def on_command(ctx):
-    m = f"{ctx.message.content} ::: @{ctx.message.author.name}({ctx.message.author.id}) #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
+    m = f"{ctx.message.content} ::: @{ctx.message.author.name}({ctx.message.author.id}) #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id}) "
     print(m)
 
 
 @bot.event
 async def on_command_error(ctx, error):
+    dm = ctx.author.dm_channel
+    if dm is None:
+        dm = await ctx.author.create_dm()
     if isinstance(error, commands.errors.CommandNotFound):
-        await ctx.send(str(error))
+        await dm.send(str(error))
     elif isinstance(error, commands.errors.MissingRequiredArgument):
-        x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
-        misarg = f"Missing argument:`{error.param.name}`. Check ``{bot.command_prefix}help {x}``!"
-        await ctx.send(misarg)
+        # Remove "Check help" message because help command is disabled.
+        # x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
+        misarg = f"Missing argument:`{error.param.name}`."  # Check ``{bot.command_prefix}help {x}``!
+        await dm.send(misarg)
     elif isinstance(error, discord.errors.Forbidden):
         pass
     else:
-        await ctx.send("An unknown error occured.")
+        await dm.send("An unknown error occured.")
         raise error
+
 
 '''
 @bot.command(aliases=["libs", "libraries", "librarylist"])
