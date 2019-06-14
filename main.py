@@ -26,7 +26,11 @@ async def on_ready():
 
 @bot.event
 async def on_command(ctx):
-    m = f"{ctx.message.content} ::: @{ctx.message.author.name}({ctx.message.author.id}) #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id}) "
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        m = f"“DM-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})"
+    else:
+        m = f"“Text-{ctx.message.id}” {ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})" \
+            " #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
 
 
@@ -44,8 +48,16 @@ async def on_command_error(ctx, error):
         await dm.send(misarg)
     elif isinstance(error, discord.errors.Forbidden):
         pass
+    elif isinstance(error, commands.errors.CommandInvokeError):
+        if isinstance(error.original, requests.exceptions.ConnectionError):
+            # We can catch inside ?robloxdocs but this will catch in a more generic way so in the future it still works
+            await dm.send("Connection can't be established. Maybe you have entered invalid parameters?")
+        else:
+            await dm.send(f"An unknown error occurred during command execution: {error.original}")
+            # Raise error or error.original?
+            raise error
     else:
-        await dm.send("An unknown error occured.")
+        await dm.send("An unknown error occurred.")
         raise error
 
 
