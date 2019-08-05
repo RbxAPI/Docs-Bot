@@ -7,35 +7,37 @@ class Verify(commands.Cog):
         self.words = ['apple', 'pie', 'cheese', 'dog', 'cat', 'sanjay', 'pancake', 'bloxy cola', 'bloxy is bad', 'node.js is bad', 'python is good.']
         self.client = aiohttp.ClientSession()
 
-    async def IdByUsername(self, user):
-        url = f'https://api.roblox.com/users/get-by-username?username={user}'
+    async def UsernameById(self, user):
+        url = f'https://api.roblox.com/users/{user}'
         r = await self.client.get(url)
         r = await r.json()
         return r.get('Id')
 
-    async def get_status(self, id):
-        url = f'https://www.roblox.com/users/profile/profileheader-json?userId={id}'
+    @commands.command()
+    async def verify(self, ctx):
+        url = f'https://verify.eryn.io/api/user/{ctx.message.author.id}'
         r = await self.client.get(url)
         r = await r.json()
-        return r.get('UserStatus')
-
-    @commands.command()
-    async def verify(self, ctx, user: str):
-        roblox_id = await self.IdByUsername(user)
-        if not roblox_id:
-            return await ctx.send(':x: We could not find that user on roblox')
-        code = f'{random.choice(self.words)} {random.choice(self.words)} {random.choice(self.words)} {random.choice(self.words)} {random.choice(self.words)} {random.choice(self.words)}'
-        await ctx.send(f'Please put `{code}` as your **ROBLOX** status, and then say done')
-        await self.bot.wait_for('message', check=lambda m: m.author.id == ctx.author.id and m.channel.id == ctx.channel.id and m.content == 'done', timeout=300)
-        status = await self.get_status(roblox_id)
-        if status == code:
-            await ctx.send(f'✅ You have been verified as `{user}`')
-            #add role
-            #add to db
+        if r['status'] == 'ok':
+            username = await self.UsernameById(r['robloxId'])
+            await ctx.message.member.edit(nick=username)
+            await ctx.message.member.add_roles(336577687529193472)
         else:
-            await ctx.send(':x: I was unable to find the code on your profile.')
+            pass
+            #not in eryn db
 
-
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        url = f'https://verify.eryn.io/api/user/{member.id}'
+        r = await self.client.get(url)
+        r = await r.json()
+        if r['status'] == 'ok':
+            username = await self.UsernameById(r['robloxId'])
+            await member.edit(nick=username)
+            await member.add_roles(336577687529193472)
+        else:
+            pass
+            #not in eryn db
 
 def setup(bot):
     bot.add_cog(Verify(bot))
