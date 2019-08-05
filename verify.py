@@ -22,6 +22,12 @@ class Verify(commands.Cog):
             username = await self.UsernameById(r['robloxId'])
             await ctx.message.member.edit(nick=username)
             await ctx.message.member.add_roles(336577687529193472)
+            embed = discord.Embed(
+                title='User Verified',
+                description=f'<@{member.id}> has been verified as {username}',
+                color=0x008e00
+            )
+            await ctx.send(embed=embed)
         else:
             pass
             #not in eryn db
@@ -35,6 +41,12 @@ class Verify(commands.Cog):
             username = await self.UsernameById(r['robloxId'])
             await member.edit(nick=username)
             await member.add_roles(336577687529193472)
+            embed = discord.Embed(
+                title='User Verified',
+                description=f'<@{member.id}> has been verified as {username}',
+                color=0x008e00
+            )
+            await member.guild.get_channel(335789594236813313).send(embed=embed)
         else:
             pass
             #not in eryn db
