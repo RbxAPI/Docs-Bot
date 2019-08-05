@@ -29,8 +29,7 @@ class Verify(commands.Cog):
             )
             await ctx.send(embed=embed)
         else:
-            pass
-            #not in eryn db
+            await ctx.send(f'<@{ctx.message.author.id}> :exclamation::wave: You must be new! Please go to https://verify.eryn.io/ and follow the instructions on the page in order to get verified.')
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
