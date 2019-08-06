@@ -146,7 +146,8 @@ async def resources(ctx):
                   value='Learning Java - https://www.codecademy.com/learn/learn-java \nJava Intro - '
                         'https://docs.oracle.com/javase/tutorial/')
     await ctx.send(embed=emb)
-
+    
+bot.load_extension('verify')
 
 if __name__ == "__main__":
     bot.run(docstoken.discord)
