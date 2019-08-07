@@ -89,7 +89,7 @@ async def ping(ctx):
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
     emb = discord.Embed()
-    emb.title = "No codeblock no help from libdevs kthx"
+    emb.title = "Codeblocks"
     emb.description = "Codeblock is a syntax highlighting feature from Markdown that allows us to send source codes " \
                       "that can be " \
                       "read easily. Because Discord's messages support Markdown, we can use codeblocks in Discord too."
