@@ -183,6 +183,20 @@ async def subscribe(ctx):
         await message.add_reaction(emoji_subscribe)
 
 
+@bot.command(pass_context=True)
+@commands.has_role("Library Developer")
+async def pingnews(ctx, version : str, *args):
+    message = ' '.join(args)
+    channelName = ctx.message.channel.name
+    author = ctx.message.author
+    roles = ctx.message.guild.roles
+    role = get(roles, name=channelName[channelName.find("_")+1:]+" newstest")
+    await role.edit(mentionable=True)
+
+    # If role exists for that channel, ping it
+    if role != None:
+        await ctx.send(f'{role.mention}\n**Release Notes {version}**\n{message}')
+        await role.edit(mentionable=False)
 
 
 # Disabled for now    
