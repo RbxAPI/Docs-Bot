@@ -1,16 +1,13 @@
 import discord
+import requests
 from discord.ext import commands
 from discord.utils import get
 
 import docstoken
 from utils import *
 
-import requests
-import json
-
 description = "Roblox API Server Documentation Bot"
-bot = commands.Bot(command_prefix='?', description=description)
-bot.remove_command("help")
+bot = commands.Bot(command_prefix='?', description=description, help_command=None)
 repo_list = Auto.get_repo_list()
 
 
@@ -143,10 +140,13 @@ async def api(ctx):
     emb = discord.Embed()
     emb.title = "Roblox API Site List"
     emb.description = "https://api.roblox.com/docs?useConsolidatedPage=true"
-    emb.add_field(name="BTRoblox API list", value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
-    emb.add_field(name="Robloxapi Github IO list", value="https://robloxapi.github.io/ref/index.html , https://robloxapi.github.io/ref/updates.html")
+    emb.add_field(name="BTRoblox API list",
+                  value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
+    emb.add_field(name="Robloxapi Github IO list",
+                  value="https://robloxapi.github.io/ref/index.html , https://robloxapi.github.io/ref/updates.html")
     emb.add_field(name="Devforum list", value="https://devforum.roblox.com/t/list-of-all-roblox-api-sites/154714/2")
-    emb.add_field(name="Deprecated Endpoints list", value="https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889")
+    emb.add_field(name="Deprecated Endpoints list",
+                  value="https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889")
     await ctx.send(embed=emb)
 
 
@@ -181,14 +181,14 @@ async def subscribe(ctx):
     message = ctx.message
 
     # Get the actual role
-    hasRole = get(author.roles, name=channelName[channelName.find("_")+1:]+" news")
-    role = get(roles, name=channelName[channelName.find("_")+1:]+" news")
+    hasRole = get(author.roles, name=channelName[channelName.find("_") + 1:] + " news")
+    role = get(roles, name=channelName[channelName.find("_") + 1:] + " news")
 
     # If user has role, unsubscribe to channel
     if hasRole != None:
         await author.remove_roles(hasRole)
         await message.add_reaction(emoji_unsubscribe)
-    
+
     # if user doesn't have role, subscribe to channel
     if role != None and hasRole == None:
         await author.add_roles(role)
@@ -202,7 +202,7 @@ async def pingnews(ctx, version: str, *args):
     channelName = ctx.message.channel.name
     author = ctx.message.author
     roles = ctx.message.guild.roles
-    role = get(roles, name=channelName[channelName.find("_")+1:]+" news")
+    role = get(roles, name=channelName[channelName.find("_") + 1:] + " news")
     await role.edit(mentionable=True)
 
     # If role exists for that channel, ping it
