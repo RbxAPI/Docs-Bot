@@ -213,8 +213,9 @@ async def pingnews(ctx, version: str, *args):
 
 @bot.command(pass_context=True)
 @commands.has_role("Moderator")
-async def pinglibrarydevelopers(ctx, title: str, *args):
-    message = ' '.join(args)
+async def pinglibrarydevelopers(ctx, *args):
+    title = ' '.join(args[0:2])
+    message = ' '.join(args[2:])
     roles = ctx.message.guild.roles
     role = get(roles, name="Library Developer")
     await role.edit(mentionable=True)
@@ -222,6 +223,7 @@ async def pinglibrarydevelopers(ctx, title: str, *args):
     # If role exists for that channel, ping it
     if role != None:
         await ctx.send(f'{role.mention}\n**{title}**\n{message}')
+        await role.edit(mentionable=False)
 
 
 # Disabled for now    
