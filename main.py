@@ -169,7 +169,7 @@ async def subscribe(ctx):
         await author.remove_roles(hasRole)
     
     # if user doesn't have role, subscribe to channel
-    if role != None and has == None:
+    if role != None and hasRole == None:
         await author.add_roles(role)
 
 
