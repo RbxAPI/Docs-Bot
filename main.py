@@ -123,9 +123,11 @@ async def api(ctx):
     emb = discord.Embed()
     emb.colour = discord.Colour.from_rgb(255, 255, 255)
     emb.title = "Roblox API Site List"
-    emb.description = "https://devforum.roblox.com/t/list-of-all-roblox-api-sites/154714/2"
-    emb.add_field(name="BTRoblox API list",
-                  value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
+    emb.description = "https://api.roblox.com/docs?useConsolidatedPage=true "
+    emb.add_field(name="BTRoblox API list", value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
+    emb.add_field(name="Robloxapi Github IO list", value="https://robloxapi.github.io/ref/index.html , https://robloxapi.github.io/ref/updates.html")
+    emb.add_field(name="Devforum list", value="https://devforum.roblox.com/t/list-of-all-roblox-api-sites/154714/2")
+    emd.add_field(name="Deprecated Endpoints list", value="https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889")
     await ctx.send(embed=emb)
 
 
