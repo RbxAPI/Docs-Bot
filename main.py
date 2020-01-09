@@ -161,10 +161,15 @@ async def subscribe(ctx):
     roles = ctx.message.guild.roles
 
     # Get the actual role
-    print(channelName[channelName.find("_")+1:]+"%snews")
+    hasRole = get(author.roles, name=channelName[channelName.find("_")+1:]+" news")
     role = get(roles, name=channelName[channelName.find("_")+1:]+" news")
+
+    # If user has role, unsubscribe to channel
+    if hasRole != None:
+        await author.remove_roles(hasRole)
     
-    if role != None:
+    # if user doesn't have role, subscribe to channel
+    if role != None and has == None:
         await author.add_roles(role)
 
 
