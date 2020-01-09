@@ -63,7 +63,6 @@ async def on_command_error(ctx, error):
 async def list(ctx):
     """Generate server library list"""
     embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server")
-    #print("Repo-List : ",repo_list)
     for language in repo_list:
         print(language, repo_list[language])
         for libraryName in repo_list[language]:
@@ -102,7 +101,7 @@ async def docs(ctx, doc: str, version: str):
     url = f'https://{doc}.roblox.com/docs/json/{version}'
     r = requests.get(url)
     if r.status_code != 200:
-        return await ctx.send("Sorry, Those docs don't exist.")
+        return await ctx.send("Sorry, those docs don't exist.")
     data = r.json()
     embed = discord.Embed(title=data['info']['title'], description=f'https://{doc}.roblox.com')
     i = 0
@@ -119,10 +118,29 @@ async def docs(ctx, doc: str, version: str):
     await ctx.send(embed=embed)
 
 
+@bot.command()
+async def doc(ctx, doc: str, version: str, *args):
+    keyword = ' '.join(args)
+    url = f'https://{doc}.roblox.com/docs/json/{version}'
+    r = requests.get(url)
+    if r.status_code != 200:
+        return await ctx.send("Sorry, those docs don't exist.")
+    data = r.json()
+    embed = discord.Embed(title=data['info']['title'], description=f'https://{doc}.roblox.com')
+    for path in data['paths']:
+        for method in data['paths'][path]:
+            docs = data['paths'][path][method]
+            if docs['summary'].find(keyword) != -1:
+                desc = f"""{docs['summary']}"""
+                embed.add_field(name=f"{method.upper()} {path}", value=desc, inline=True)
+                await ctx.send(embed=embed)
+                return
+            await ctx.send("Sorry, that keyword was not found in docs specified")
+
+
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
     emb = discord.Embed()
-    emb.colour = discord.Colour.from_rgb(255, 255, 255)
     emb.title = "Roblox API Site List"
     emb.description = "https://api.roblox.com/docs?useConsolidatedPage=true"
     emb.add_field(name="BTRoblox API list", value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
@@ -135,7 +153,6 @@ async def api(ctx):
 @bot.command()
 async def resources(ctx):
     emb = discord.Embed()
-    emb.colour = discord.Colour.from_rgb(255, 255, 255)
     emb.title = 'Useful Resources'
     emb.description = "Below is a list of useful resources for multiple programming languages."
     emb.add_field(name='Lua',
@@ -180,7 +197,7 @@ async def subscribe(ctx):
 
 @bot.command(pass_context=True)
 @commands.has_role("Library Developer")
-async def pingnews(ctx, version : str, *args):
+async def pingnews(ctx, version: str, *args):
     message = ' '.join(args)
     channelName = ctx.message.channel.name
     author = ctx.message.author
@@ -196,7 +213,7 @@ async def pingnews(ctx, version : str, *args):
 
 @bot.command(pass_context=True)
 @commands.has_role("Moderator")
-async def pinglibrarydevelopers(ctx, title : str, *args):
+async def pinglibrarydevelopers(ctx, title: str, *args):
     message = ' '.join(args)
     roles = ctx.message.guild.roles
     role = get(roles, name="Library Developer")
