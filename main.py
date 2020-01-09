@@ -105,17 +105,27 @@ async def codeblock(ctx):
 # Let's make this async one day
 @bot.command()
 async def robloxdocs(ctx, doc: str, version: str):
+    if ctx.channel.id != 598564981989965854:
+        return await ctx.send("Sorry, you need to do that in <#598564981989965854>")
     url = f'https://{doc}.roblox.com/docs/json/{version}'
     r = requests.get(url)
-    data = json.loads(r.text)
+    if r.status_code != 200:
+        return await ctx.send("Sorry, Those docs don't exist.")
+    data = r.json()
     embed = discord.Embed(title=data['info']['title'])
-    for name, value in data['paths'].items():
-        method = [*value.items()][0][0]
-        roblox = value[method]
-        embed_value = roblox['summary'] + ' ' + method + '\n\n**Parameters**\n'
-        for parameter in roblox['parameters']:
-            embed_value += parameter['name'] + ': ' + parameter.get('description') or 'No description' + '\n'
-        embed.add_field(name=method.upper() + ' ' + name, value=embed_value, inline=True)
+    i = 0
+    for path in data['paths']:
+        for method in data['paths'][path]:
+            docs = data['paths'][path][method]
+            desc = f"""
+                {docs['summary']}
+            """
+            embed.add_field(name=f"{method.upper()} {path}", value=desc, inline=True)
+            if i >= 25:
+                await ctx.send(embed=embed)
+                embed = discord.Embed(title=data['info']['title'])
+                i = 0
+            i += 1
     await ctx.send(embed=embed)
 
 
