@@ -154,11 +154,19 @@ async def resources(ctx):
     await ctx.send(embed=emb)
 
 
+'''
+emoji = '\N{THUMBS UP SIGN}'
+# or '\U0001f44d' or '👍'
+await message.add_reaction(emoji)
+'''
 @bot.command(pass_context=True)
 async def subscribe(ctx):
+    emoji_subscribe = '👍'
+    emoji_unsubscribe = '👎'
     channelName = ctx.message.channel.name
     author = ctx.message.author
     roles = ctx.message.guild.roles
+    message = ctx.message
 
     # Get the actual role
     hasRole = get(author.roles, name=channelName[channelName.find("_")+1:]+" news")
@@ -167,10 +175,12 @@ async def subscribe(ctx):
     # If user has role, unsubscribe to channel
     if hasRole != None:
         await author.remove_roles(hasRole)
+        await message.add_reaction(emoji_unsubscribe)
     
     # if user doesn't have role, subscribe to channel
     if role != None and hasRole == None:
         await author.add_roles(role)
+        await message.add_reaction(emoji_subscribe)
 
 
 
