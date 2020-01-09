@@ -182,9 +182,6 @@ async def subscribe(ctx):
         await author.add_roles(role)
         await message.add_reaction(emoji_subscribe)
 
-
-
-
 # Disabled for now    
 # bot.load_extension('verify')
 
