@@ -1,6 +1,8 @@
 # Docs-Bot
 Roblox API Server documentation Bot
 
+Download: ``git clone https://github.com/RbxAPI/Docs-Bot.git``
+
 # Purpose
 This repo and it's contents serve to make development regarding the Roblox API
 much easier and provides links to various streamlined libraries. This is done
