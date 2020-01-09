@@ -11,7 +11,10 @@
     },
     "Lua": {
         "RobloxCommunication": "https://github.com/CrescentCode/RobloxCommunication",
-        "Roblox.lua": "https://github.com/OliverHensworth/roblox.lua"
+        "Roblox.lua": "https://github.com/OliverHensworth/roblox.lua",
+        "RoStrap": "https://github.com/RoStrap",
+        "Overture": "https://github.com/devSparkle/Overture",
+        "MaterialR": "https://devforum.roblox.com/t/materialr-ui-framework/330396"
     },
     "C#": {
         "RobloxAPI": "https://github.com/gamenew09/RobloxAPI"
