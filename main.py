@@ -71,13 +71,12 @@ async def list(ctx):
 @bot.command()
 async def ping(ctx):
     resp = await ctx.send('Pong! Loading...', delete_after=1.0)
-    latensnap = bot.latency
     diff = resp.created_at - ctx.message.created_at
     totalms = 1000 * diff.total_seconds()
     emb = discord.Embed()
     emb.title = "Pong!"
     emb.add_field(name="Message time", value=f"{totalms}ms")
-    emb.add_field(name="API latency", value=f"{(1000 * latensnap):.1f}ms")
+    emb.add_field(name="API latency", value=f"{(1000 * bot.latency):.1f}ms")
     await ctx.send(embed=emb)
 
 
@@ -93,14 +92,19 @@ async def codeblock(ctx):
     await ctx.send(embed=emb)
 
 
-@bot.command()
-async def docs(ctx, doc: str, version: str):
+async def check_doc_exists(ctx, doc, version):
     url = f'https://{doc}.roblox.com/docs/json/{version}'
     r = requests.get(url)
     if r.status_code != 200:
         return await ctx.send("Sorry, those docs don't exist.")
     data = r.json()
     embed = discord.Embed(title=data['info']['title'], description=f'https://{doc}.roblox.com')
+    return data, embed
+
+
+@bot.command()
+async def docs(ctx, doc: str, version: str):
+    data, embed = await check_doc_exists(ctx, doc, version)
     i = 0
     for path in data['paths']:
         for method in data['paths'][path]:
@@ -118,12 +122,7 @@ async def docs(ctx, doc: str, version: str):
 @bot.command()
 async def doc(ctx, doc: str, version: str, *args):
     keyword = ' '.join(args)
-    url = f'https://{doc}.roblox.com/docs/json/{version}'
-    r = requests.get(url)
-    if r.status_code != 200:
-        return await ctx.send("Sorry, those docs don't exist.")
-    data = r.json()
-    embed = discord.Embed(title=data['info']['title'], description=f'https://{doc}.roblox.com')
+    data, embed = await check_doc_exists(ctx, doc, version)
     for path in data['paths']:
         for method in data['paths'][path]:
             docs = data['paths'][path][method]
@@ -185,12 +184,12 @@ async def subscribe(ctx):
     role = get(roles, name=channelName[channelName.find("_") + 1:] + " news")
 
     # If user has role, unsubscribe to channel
-    if hasRole != None:
+    if hasRole is not None:
         await author.remove_roles(hasRole)
         await message.add_reaction(emoji_unsubscribe)
 
     # if user doesn't have role, subscribe to channel
-    if role != None and hasRole == None:
+    if role is not None and hasRole is None:
         await author.add_roles(role)
         await message.add_reaction(emoji_subscribe)
 
@@ -206,7 +205,7 @@ async def pingnews(ctx, version: str, *args):
     await role.edit(mentionable=True)
 
     # If role exists for that channel, ping it
-    if role != None:
+    if role is not None:
         await ctx.send(f'{role.mention}\n**Release Notes {version}**\n{message}')
         await role.edit(mentionable=False)
 
@@ -221,7 +220,7 @@ async def pinglibrarydevelopers(ctx, *args):
     await role.edit(mentionable=True)
 
     # If role exists for that channel, ping it
-    if role != None:
+    if role is not None:
         await ctx.send(f'{role.mention}\n**{title}**\n{message}')
         await role.edit(mentionable=False)
 
