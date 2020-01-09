@@ -7,7 +7,8 @@
     "Node.js": {
         "Roblox.js": "https://github.com/sentanos/roblox-js",
         "Noblox.js": "https://github.com/suufi/noblox.js",
-        "Bloxy": "https://github.com/MartinRBX/bloxy"
+        "Bloxy": "https://github.com/MartinRBX/bloxy",
+        "TSBlox": "https://github.com/Dionysusnu/tsblox"
     },
     "Lua": {
         "RobloxCommunication": "https://github.com/CrescentCode/RobloxCommunication",
