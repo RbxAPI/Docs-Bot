@@ -2,6 +2,9 @@
 .idea
 docstoken.py
 
+# Testing file, ignore
+ignore.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
