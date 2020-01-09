@@ -17,11 +17,6 @@ repo_list = Auto.get_repo_list()
 async def on_ready():
     print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
     print("--")
-    activity = discord.Activity(
-        name="noobs",
-        type=discord.ActivityType.watching
-    )
-    await bot.change_presence(activity=activity)
 
 
 @bot.event
@@ -33,7 +28,7 @@ async def on_command(ctx):
             " #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
 
-
+'''
 @bot.event
 async def on_command_error(ctx, error):
     dm = ctx.author.dm_channel
@@ -59,18 +54,26 @@ async def on_command_error(ctx, error):
     else:
         await dm.send("An unknown error occurred.")
         raise error
-
-
 '''
+
+
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
+    index = 0
     """Generate server library list"""
     embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server",
                           color=0xFFFFFF)
-    for repo in repo_list:
-        embed.add_field(name=repo_list[repo]["name"], value=repo_list[repo]["link"], inline=False)
-    await ctx.send(embed=embed)
-'''
+    print("Repo-List : ",repo_list)
+    #for repo in repo_list:
+        #for link in repo:
+        #print("Repo : ",repo)
+            #print("Link : ",link)
+        #embed.add_field(name=repo_list[repo]["name"], value=repo_list[repo]["link"], inline=False)
+    #await ctx.send(embed=embed)
+    for language in repo_list:
+        for repo in language:
+            print("Language : ",type(repo_list.keys()))
+
 
 
 @bot.command()
@@ -81,8 +84,8 @@ async def ping(ctx):
     totalms = 1000 * diff.total_seconds()
     emb = discord.Embed()
     emb.title = "Pong!"
-    emb.add_field(name="Message δtime", value=f"{totalms}ms")
-    emb.add_field(name="Bot websocket latency", value=f"{(1000 * latensnap):.1f}ms")
+    emb.add_field(name="Message time", value=f"{totalms}ms")
+    emb.add_field(name="API latency", value=f"{(1000 * latensnap):.1f}ms")
     await ctx.send(embed=emb)
 
 
@@ -146,8 +149,9 @@ async def resources(ctx):
                   value='Learning Java - https://www.codecademy.com/learn/learn-java \nJava Intro - '
                         'https://docs.oracle.com/javase/tutorial/')
     await ctx.send(embed=emb)
-    
-bot.load_extension('verify')
+
+# Disabled for now    
+# bot.load_extension('verify')
 
 if __name__ == "__main__":
     bot.run(docstoken.discord)
