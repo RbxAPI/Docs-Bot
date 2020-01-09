@@ -29,6 +29,7 @@ async def on_command(ctx):
             " #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
 
+
 '''
 @bot.event
 async def on_command_error(ctx, error):
@@ -60,21 +61,15 @@ async def on_command_error(ctx, error):
 
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
-    index = 0
     """Generate server library list"""
-    embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server",
-                          color=0xFFFFFF)
-    print("Repo-List : ",repo_list)
-    #for repo in repo_list:
-        #for link in repo:
-        #print("Repo : ",repo)
-            #print("Link : ",link)
-        #embed.add_field(name=repo_list[repo]["name"], value=repo_list[repo]["link"], inline=False)
-    #await ctx.send(embed=embed)
+    embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server")
+    #print("Repo-List : ",repo_list)
     for language in repo_list:
-        for repo in language:
-            print("Language : ",type(repo_list.keys()))
-
+        print(language, repo_list[language])
+        for libraryName in repo_list[language]:
+            print(libraryName, repo_list[language][libraryName])
+            embed.add_field(name=libraryName, value=repo_list[language][libraryName])
+    await ctx.send(embed=embed)
 
 
 @bot.command()
@@ -124,7 +119,7 @@ async def docs(ctx, doc: str, version: str):
     await ctx.send(embed=embed)
 
 
-@bot.command(aliases=["apisites", "robloxapi"])
+@bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
     emb = discord.Embed()
     emb.colour = discord.Colour.from_rgb(255, 255, 255)
@@ -190,13 +185,14 @@ async def pingnews(ctx, version : str, *args):
     channelName = ctx.message.channel.name
     author = ctx.message.author
     roles = ctx.message.guild.roles
-    role = get(roles, name=channelName[channelName.find("_")+1:]+" newstest")
+    role = get(roles, name=channelName[channelName.find("_")+1:]+" news")
     await role.edit(mentionable=True)
 
     # If role exists for that channel, ping it
     if role != None:
         await ctx.send(f'{role.mention}\n**Release Notes {version}**\n{message}')
         await role.edit(mentionable=False)
+
 
 @bot.command(pass_context=True)
 @commands.has_role("Moderator")
