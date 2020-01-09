@@ -154,11 +154,6 @@ async def resources(ctx):
     await ctx.send(embed=emb)
 
 
-'''
-emoji = '\N{THUMBS UP SIGN}'
-# or '\U0001f44d' or '👍'
-await message.add_reaction(emoji)
-'''
 @bot.command(pass_context=True)
 async def subscribe(ctx):
     emoji_subscribe = '👍'
@@ -181,6 +176,8 @@ async def subscribe(ctx):
     if role != None and hasRole == None:
         await author.add_roles(role)
         await message.add_reaction(emoji_subscribe)
+
+
 
 # Disabled for now    
 # bot.load_extension('verify')
