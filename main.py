@@ -114,7 +114,7 @@ async def docs(ctx, doc: str, version: str):
     for path in data['paths']:
         for method in data['paths'][path]:
             docs = data['paths'][path][method]
-            desc = f'{docs['summary']}'
+            desc = f"""{docs['summary']}"""
             embed.add_field(name=f"{method.upper()} {path}", value=desc, inline=True)
             if i >= 25:
                 await ctx.send(embed=embed)
@@ -181,6 +181,7 @@ async def subscribe(ctx):
     if role != None and hasRole == None:
         await author.add_roles(role)
         await message.add_reaction(emoji_subscribe)
+
 
 
 
