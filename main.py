@@ -135,7 +135,7 @@ async def doc(ctx, doc: str, version: str, *args):
                 embed.add_field(name=f"{method.upper()} {path}", value=desc, inline=True)
                 await ctx.send(embed=embed)
                 return
-            await ctx.send("Sorry, that keyword was not found in docs specified")
+    await ctx.send("Sorry, that keyword was not found in docs specified")
 
 
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
