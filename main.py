@@ -56,8 +56,7 @@ async def codeblock(ctx):
     emb = discord.Embed()
     emb.title = "Codeblocks"
     emb.description = "Codeblock is a syntax highlighting feature from Markdown that allows us to send source codes that can be read easily. Because Discord's messages support Markdown, we can use codeblocks in Discord too."
-    emb.add_field(name="How to use codeblock?", value="https://help.github.com/en/articles/creating-and-highlighting"
-                                                      "-code-blocks#syntax-highlighting")
+    emb.add_field(name="How to use codeblock?", value="https://help.github.com/en/articles/creating-and-highlighting-code-blocks#syntax-highlighting")
     await ctx.send(embed=emb)
 
 
