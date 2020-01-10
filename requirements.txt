@@ -1,2 +1,2 @@
 requests
-discord.py==1.2.5
+discord.py>=1.2.5
