@@ -8,13 +8,3 @@ if __name__ == '__main__':
     with open("main.py",'w+') as file:
         file.write(str((response.text).encode("utf-8")))
     file.close()
-
-    # This is incredibly hacky but, eh.
-
-    # If Mac then, ...
-    if os.name == "posix":
-        os.system('python3 main.py')
-    
-    # If Windows then, ...
-    elif os.name == "nt":
-        os.system('python main.py')
