@@ -30,43 +30,12 @@ async def on_command(ctx):
     print(m)
 
 
-'''
-@bot.event
-async def on_command_error(ctx, error):
-    dm = ctx.author.dm_channel
-    if dm is None:
-        dm = await ctx.author.create_dm()
-    if isinstance(error, commands.errors.CommandNotFound):
-        await dm.send(str(error))
-    elif isinstance(error, commands.errors.MissingRequiredArgument):
-        # Remove "Check help" message because help command is disabled.
-        # x = ctx.invoked_with if ctx.invoked_subcommand is None else ctx.invoked_subcommand
-        misarg = f"Missing argument:`{error.param.name}`."  # Check ``{bot.command_prefix}help {x}``!
-        await dm.send(misarg)
-    elif isinstance(error, discord.errors.Forbidden):
-        pass
-    elif isinstance(error, commands.errors.CommandInvokeError):
-        if isinstance(error.original, requests.exceptions.ConnectionError):
-            # We can catch inside ?robloxdocs but this will catch in a more generic way so in the future it still works
-            await dm.send("Connection can't be established. Maybe you have entered invalid parameters?")
-        else:
-            await dm.send(f"An unknown error occurred during command execution: {error.original}")
-            # Raise error or error.original?
-            raise error
-    else:
-        await dm.send("An unknown error occurred.")
-        raise error
-'''
-
-
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
     embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server")
     for language in repo_list:
-        print(language, repo_list[language])
         for libraryName in repo_list[language]:
-            print(libraryName, repo_list[language][libraryName])
             embed.add_field(name=libraryName, value=repo_list[language][libraryName])
     await ctx.send(embed=embed)
 
