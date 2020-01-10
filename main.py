@@ -33,7 +33,7 @@ async def on_command(ctx):
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
-    embed = discord.Embed(title="Roblox API", description="General library list specific to this server")
+    embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server")
     for language in repo_list:
         for libraryName in repo_list[language]:
             embed.add_field(name=libraryName, value=repo_list[language][libraryName])
@@ -193,6 +193,12 @@ async def pinglibrarydevelopers(ctx, *args):
     if role != None:
         await ctx.send(f'{role.mention}\n**{title}**\n{message}')
         await role.edit(mentionable=False)
+
+
+@bot.command(pass_context=True)
+@commands.has_role("Moderator")
+async def restart(ctx):
+    await ctx.bot.logout()
 
 
 # Disabled for now    

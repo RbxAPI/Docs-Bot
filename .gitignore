@@ -4,6 +4,7 @@ docstoken.py
 
 # Testing file, ignore
 ignore.py
+main_ignore.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

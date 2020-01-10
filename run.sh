@@ -1,3 +1,3 @@
 #!/usr/bin/env python
-chmod +x main.py
-python3 main.py
+chmod +x generate.py
+python3 generate.py
