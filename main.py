@@ -28,7 +28,7 @@ async def on_command(ctx):
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
-    embed = discord.Embed(title="Roblox API - Library List", description="General library list specific to this server")
+    embed = discord.Embed(title="Roblox API", description="General library list specific to this server")
     for language in repo_list:
         for libraryName in repo_list[language]:
             embed.add_field(name=libraryName, value=repo_list[language][libraryName])
@@ -101,7 +101,7 @@ async def doc(ctx, doc: str, version: str, *args):
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
     emb = discord.Embed()
-    emb.title = "Roblox API Site List"
+    emb.title = "Roblox API - Reference List"
     emb.description = "https://api.roblox.com/docs?useConsolidatedPage=true"
     emb.add_field(name="BTRoblox API list",
                   value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
