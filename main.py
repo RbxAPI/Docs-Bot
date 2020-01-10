@@ -19,7 +19,8 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
     print("--")
 
-
+# Encoding issues on Windows ?? 
+'''
 @bot.event
 async def on_command(ctx):
     if isinstance(ctx.channel, discord.channel.DMChannel):
@@ -28,7 +29,7 @@ async def on_command(ctx):
         m = f"“Text-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})" \
             " #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
-
+'''
 
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
@@ -57,9 +58,7 @@ async def ping(ctx):
 async def codeblock(ctx):
     emb = discord.Embed()
     emb.title = "Codeblocks"
-    emb.description = "Codeblock is a syntax highlighting feature from Markdown that allows us to send source codes " \
-                      "that can be " \
-                      "read easily. Because Discord's messages support Markdown, we can use codeblocks in Discord too."
+    emb.description = "Codeblock is a syntax highlighting feature from Markdown that allows us to send source codes that can be read easily. Because Discord's messages support Markdown, we can use codeblocks in Discord too."
     emb.add_field(name="How to use codeblock?", value="https://help.github.com/en/articles/creating-and-highlighting"
                                                       "-code-blocks#syntax-highlighting")
     await ctx.send(embed=emb)
