@@ -19,7 +19,8 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
     print("--")
 
-
+# Encoding issues on Windows ?? 
+'''
 @bot.event
 async def on_command(ctx):
     if isinstance(ctx.channel, discord.channel.DMChannel):
@@ -28,7 +29,7 @@ async def on_command(ctx):
         m = f"“Text-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})" \
             " #{ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
-
+'''
 
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
