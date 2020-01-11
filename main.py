@@ -98,6 +98,22 @@ async def doc(ctx, doc: str, version: str, *args):
     await ctx.send("Sorry, that keyword was not found in docs specified")
 
 
+@bot.command()
+async def leaderboard(ctx):
+    roles = []
+    for role in ctx.guild.roles:
+        if role.name.endswith("news"):
+            roles.append({
+                "name": role.name,
+                "count": len(role.members)
+            })
+    roles.sort(key=lambda x: x['count'], reverse=True)
+    embed = discord.Embed(title="Subscriber leaderboards")
+    for i in range(len(roles)):
+        embed.add_field(name=f"{i+1}. {roles[i]['name']}", value=f"**Subscribers:** {roles[i]['count']}")
+    await ctx.send(embed=embed)
+
+
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
     emb = discord.Embed()
