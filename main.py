@@ -4,12 +4,10 @@ from discord.ext import commands
 from discord.utils import get
 
 import docstoken
-from utils import *
+import json
 
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?', description=description, help_command=None)
-repo_list = Auto.get_repo_list()
-
 
 @bot.event
 async def on_ready():
@@ -29,9 +27,11 @@ async def on_command(ctx):
 async def list(ctx):
     """Generate server library list"""
     embed = discord.Embed(title="Roblox API", description="General library list specific to this server")
-    for language in repo_list:
-        for libraryName in repo_list[language]:
-            embed.add_field(name=libraryName, value=repo_list[language][libraryName])
+    response = requests.get("https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/api_list.json",headers={"Cache-Control": "no-cache"})
+    data = json.loads(response.content)
+    for language in data:
+        for libraryName in data[language]:
+            embed.add_field(name=libraryName, value=data[language][libraryName])
     await ctx.send(embed=embed)
 
 
@@ -96,6 +96,22 @@ async def doc(ctx, doc: str, version: str, *args):
                 await ctx.send(embed=embed)
                 return
     await ctx.send("Sorry, that keyword was not found in docs specified")
+
+
+@bot.command()
+async def leaderboard(ctx):
+    roles = []
+    for role in ctx.guild.roles:
+        if role.name.endswith("news"):
+            roles.append({
+                "name": role.name,
+                "count": len(role.members)
+            })
+    roles.sort(key=lambda x: x['count'], reverse=True)
+    embed = discord.Embed(title="Subscriber leaderboards")
+    for i in range(len(roles)):
+        embed.add_field(name=f"{i+1}. {roles[i]['name']}", value=f"**Subscribers:** {roles[i]['count']}")
+    await ctx.send(embed=embed)
 
 
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
