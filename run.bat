@@ -5,3 +5,4 @@ chcp 65001
 
 REM Add check to see if Python Version is >= 3.7.x
 %SYSTEMROOT%\py.ex generate.py
+%SYSTEMROOT%\py.ex main.py
