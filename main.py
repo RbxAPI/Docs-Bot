@@ -1,13 +1,22 @@
+import asyncio
+
+import aiohttp
 import discord
-import requests
+from discord import utils
 from discord.ext import commands
-from discord.utils import get
 
 import docstoken
-import json
 
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?', description=description, help_command=None)
+
+
+async def create_session():
+    return aiohttp.ClientSession()
+
+
+session = asyncio.get_event_loop().run_until_complete(create_session())
+
 
 @bot.event
 async def on_ready():
@@ -23,12 +32,13 @@ async def on_command(ctx):
         m = f"“Text-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id}) {ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
     print(m)
 
+
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
+    async with session.get("https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/api_list.json") as r:
+        data = await r.json(content_type=None)
     embed = discord.Embed(title="Roblox API", description="General library list specific to this server")
-    response = requests.get("https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/api_list.json",headers={"Cache-Control": "no-cache"})
-    data = json.loads(response.content)
     for language in data:
         for libraryName in data[language]:
             embed.add_field(name=libraryName, value=data[language][libraryName])
@@ -52,18 +62,19 @@ async def codeblock(ctx):
     emb = discord.Embed()
     emb.title = "Codeblocks"
     emb.description = "Codeblock is a syntax highlighting feature from Markdown that allows us to send source codes that can be read easily. Because Discord's messages support Markdown, we can use codeblocks in Discord too."
-    emb.add_field(name="How to use codeblock?", value="https://help.github.com/en/articles/creating-and-highlighting-code-blocks#syntax-highlighting")
+    emb.add_field(name="How to use codeblock?",
+                  value="https://help.github.com/en/articles/creating-and-highlighting-code-blocks#syntax-highlighting")
     await ctx.send(embed=emb)
 
 
 async def check_doc_exists(ctx, doc, version):
-    url = f'https://{doc}.roblox.com/docs/json/{version}'
-    r = requests.get(url)
-    if r.status_code != 200:
-        return await ctx.send("Sorry, those docs don't exist.")
-    data = r.json()
-    embed = discord.Embed(title=data['info']['title'], description=f'https://{doc}.roblox.com')
-    return data, embed
+    base = f'https://{doc}.roblox.com'
+    async with session.get(f'{base}/docs/json/{version}') as r:
+        if r.status != 200:
+            return await ctx.send("Sorry, those docs don't exist.")
+        else:
+            data = await r.json()
+            return data, discord.Embed(title=data['info']['title'], description=base)
 
 
 @bot.command()
@@ -110,7 +121,7 @@ async def leaderboard(ctx):
     roles.sort(key=lambda x: x['count'], reverse=True)
     embed = discord.Embed(title="Subscriber leaderboards")
     for i in range(len(roles)):
-        embed.add_field(name=f"{i+1}. {roles[i]['name']}", value=f"**Subscribers:** {roles[i]['count']}")
+        embed.add_field(name=f"{i + 1}. {roles[i]['name']}", value=f"**Subscribers:** {roles[i]['count']}")
     await ctx.send(embed=embed)
 
 
@@ -150,52 +161,39 @@ async def resources(ctx):
     await ctx.send(embed=emb)
 
 
-@bot.command(pass_context=True)
+def get_news_role(ctx):
+    return utils.find(lambda r: r.name.startswith(ctx.channel.name.split('_')[1]), ctx.guild.roles)
+
+
+@bot.command()
 async def subscribe(ctx):
-    emoji_subscribe = '👍'
-    emoji_unsubscribe = '👎'
-    channelName = ctx.message.channel.name
-    author = ctx.message.author
-    roles = ctx.message.guild.roles
-    message = ctx.message
+    if ctx.channel.category_id != 361587040749355018:
+        return
+    role = get_news_role(ctx)
 
-    # Get the actual role
-    hasRole = get(author.roles, name=channelName[channelName.find("_") + 1:] + " news")
-    role = get(roles, name=channelName[channelName.find("_") + 1:] + " news")
-
-    # If user has role, unsubscribe to channel
-    if hasRole is not None:
-        await author.remove_roles(hasRole)
-        await message.add_reaction(emoji_unsubscribe)
-
-    # if user doesn't have role, subscribe to channel
-    if role is not None and hasRole is None:
-        await author.add_roles(role)
-        await message.add_reaction(emoji_subscribe)
+    if role in ctx.author.roles:
+        await ctx.author.remove_roles(role)
+        await ctx.message.add_reaction('👎')
+    else:
+        await ctx.author.add_roles(role)
+        await ctx.message.add_reaction('👍')
 
 
-@bot.command(pass_context=True)
+@bot.command()
 @commands.has_role("Library Developer")
-async def pingnews(ctx, version: str, *args):
-    message = ' '.join(args)
-    channelName = ctx.message.channel.name
-    author = ctx.message.author
-    roles = ctx.message.guild.roles
-    role = get(roles, name=channelName[channelName.find("_") + 1:] + " news")
+async def pingnews(ctx, version: str, *, args):
+    role = get_news_role(ctx)
     await role.edit(mentionable=True)
-
-    # If role exists for that channel, ping it
-    if role is not None:
-        await ctx.send(f'{role.mention}\n**Release Notes {version}**\n{message}')
-        await role.edit(mentionable=False)
+    await ctx.send(f'{role.mention}\n**Release Notes {version}**\n{args}')
+    await role.edit(mentionable=False)
 
 
-@bot.command(pass_context=True)
+@bot.command()
 @commands.has_role("Moderator")
 async def pinglibrarydevelopers(ctx, *args):
     title = ' '.join(args[0:2])
     message = ' '.join(args[2:])
-    roles = ctx.message.guild.roles
+    roles = ctx.guild.roles
     role = get(roles, name="Library Developer")
     await role.edit(mentionable=True)
 
