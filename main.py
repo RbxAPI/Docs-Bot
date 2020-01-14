@@ -160,15 +160,25 @@ async def resources(ctx):
     await ctx.send(embed=emb)
 
 
-def get_news_role(ctx):
+def get_news_role(ctx, *, channel: discord.TextChannel = None):
+    if channel != None:
+        return utils.find(lambda r: r.name.startswith(channel.name.split('_')[1]), ctx.guild.roles)
     return utils.find(lambda r: r.name.startswith(ctx.channel.name.split('_')[1]), ctx.guild.roles)
 
 
 @bot.command()
-async def subscribe(ctx):
-    if ctx.channel.category_id != 361587040749355018:
+async def subscribe(ctx, *, channel: discord.TextChannel = None):
+    role = None
+
+    # bot_commands channel
+    if ctx.message.channel.id == 598564981989965854 and channel:
+        role = get_news_role(ctx,channel=channel)
+    
+    # Not bot_commands channel, but is a channel in "Libraries" or "Frameworks" categories
+    elif (ctx.message.channel.id != 598564981989965854 or ctx.channel.category_id == 361587040749355018 or ctx.channel.category_id == 361587387538604054) and not channel:
+        role = get_news_role(ctx)
+    else:
         return
-    role = get_news_role(ctx)
 
     if role in ctx.author.roles:
         await ctx.author.remove_roles(role)
