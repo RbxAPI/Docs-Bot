@@ -95,13 +95,12 @@ async def docs(ctx, doc: str, version: str):
 
 
 @bot.command()
-async def doc(ctx, doc: str, version: str, *args):
-    keyword = ' '.join(args)
+async def doc(ctx, doc: str, version: str, *, args):
     data, embed = await check_doc_exists(ctx, doc, version)
     for path in data['paths']:
         for method in data['paths'][path]:
             docs = data['paths'][path][method]
-            if docs['summary'].find(keyword) != -1:
+            if docs['summary'].find(args) != -1:
                 desc = f"""{docs['summary']}"""
                 embed.add_field(name=f"{method.upper()} {path}", value=desc, inline=True)
                 await ctx.send(embed=embed)
@@ -190,23 +189,17 @@ async def pingnews(ctx, version: str, *, args):
 
 @bot.command()
 @commands.has_role("Moderator")
-async def pinglibrarydevelopers(ctx, *args):
-    title = ' '.join(args[0:2])
-    message = ' '.join(args[2:])
-    roles = ctx.guild.roles
-    role = get(roles, name="Library Developer")
+async def pinglibrarydevelopers(ctx, a, b, *, args):
+    role = utils.get(ctx.guild.roles, name="Library Developer")
     await role.edit(mentionable=True)
-
-    # If role exists for that channel, ping it
-    if role is not None:
-        await ctx.send(f'{role.mention}\n**{title}**\n{message}')
-        await role.edit(mentionable=False)
+    await ctx.send(f'{role.mention}\n**{a} {b}**\n{args}')
+    await role.edit(mentionable=False)
 
 
-@bot.command(pass_context=True)
+@bot.command()
 @commands.has_role("Moderator")
 async def restart(ctx):
-    await ctx.bot.logout()
+    await bot.logout()
 
 
 # Disabled for now    
