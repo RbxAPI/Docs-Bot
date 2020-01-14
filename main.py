@@ -199,10 +199,10 @@ async def pingnews(ctx, version: str, *, args):
 
 @bot.command()
 @commands.has_role("Moderator")
-async def pinglibrarydevelopers(ctx, a, b, *, args):
+async def pinglibrarydevelopers(ctx, title, message, *, args):
     role = utils.get(ctx.guild.roles, name="Library Developer")
     await role.edit(mentionable=True)
-    await ctx.send(f'{role.mention}\n**{a} {b}**\n{args}')
+    await ctx.send(f'{role.mention}\n**{title}**\n{message}')
     await role.edit(mentionable=False)
 
 
