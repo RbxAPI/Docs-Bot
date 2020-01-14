@@ -1,5 +1,3 @@
-import asyncio
-
 import aiohttp
 import discord
 from discord import utils
@@ -9,28 +7,15 @@ import docstoken
 
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?', description=description, help_command=None)
-
-
-async def create_session():
-    return aiohttp.ClientSession()
-
-
-session = asyncio.get_event_loop().run_until_complete(create_session())
+session = None
 
 
 @bot.event
 async def on_ready():
+    global session
+    session = aiohttp.ClientSession()
     print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
     print("--")
-
-
-@bot.event
-async def on_command(ctx):
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-        m = f"“DM-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id})"
-    else:
-        m = f"“Text-{ctx.message.id}”{ctx.message.content} ::: @{ctx.author.name}({ctx.author.id}) {ctx.channel.name}({ctx.channel.id}) [{ctx.guild.name}]({ctx.guild.id})"
-    print(m)
 
 
 @bot.command(aliases=["libs", "libraries", "librarylist"])
@@ -71,7 +56,7 @@ async def check_doc_exists(ctx, doc, version):
     base = f'https://{doc}.roblox.com'
     async with session.get(f'{base}/docs/json/{version}') as r:
         if r.status != 200:
-            return await ctx.send("Sorry, those docs don't exist.")
+            return await ctx.send("Sorry, those docs don't exist."), None
         else:
             data = await r.json()
             return data, discord.Embed(title=data['info']['title'], description=base)
@@ -80,6 +65,8 @@ async def check_doc_exists(ctx, doc, version):
 @bot.command()
 async def docs(ctx, doc: str, version: str):
     data, embed = await check_doc_exists(ctx, doc, version)
+    if embed is None:
+        return
     i = 0
     for path in data['paths']:
         for method in data['paths'][path]:
@@ -97,6 +84,8 @@ async def docs(ctx, doc: str, version: str):
 @bot.command()
 async def doc(ctx, doc: str, version: str, *, args):
     data, embed = await check_doc_exists(ctx, doc, version)
+    if embed is None:
+        return
     for path in data['paths']:
         for method in data['paths'][path]:
             docs = data['paths'][path][method]
@@ -110,17 +99,11 @@ async def doc(ctx, doc: str, version: str, *, args):
 
 @bot.command()
 async def leaderboard(ctx):
-    roles = []
-    for role in ctx.guild.roles:
-        if role.name.endswith("news"):
-            roles.append({
-                "name": role.name,
-                "count": len(role.members)
-            })
-    roles.sort(key=lambda x: x['count'], reverse=True)
+    roles = [(r.name, len(r.members)) for r in ctx.guild.roles if 'news' in r.name]
+    roles.sort(key=lambda x: x[1], reverse=True)
     embed = discord.Embed(title="Subscriber leaderboards")
-    for i in range(len(roles)):
-        embed.add_field(name=f"{i + 1}. {roles[i]['name']}", value=f"**Subscribers:** {roles[i]['count']}")
+    for i, r in enumerate(roles):
+        embed.add_field(name=f"{i + 1}. {r[0]}", value=f"**Subscribers:** {r[1]}")
     await ctx.send(embed=embed)
 
 
@@ -160,22 +143,20 @@ async def resources(ctx):
     await ctx.send(embed=emb)
 
 
-def get_news_role(ctx, *, channel: discord.TextChannel = None):
-    if channel != None:
-        return utils.find(lambda r: r.name.startswith(channel.name.split('_')[1]), ctx.guild.roles)
-    return utils.find(lambda r: r.name.startswith(ctx.channel.name.split('_')[1]), ctx.guild.roles)
+def get_news_role(ctx, channel: discord.TextChannel = None):
+    ch = channel if channel else ctx.channel
+    return utils.find(lambda r: r.name.startswith(ch.name.split('_')[1]), ctx.guild.roles)
 
 
 @bot.command()
-async def subscribe(ctx, *, channel: discord.TextChannel = None):
-    role = None
+async def subscribe(ctx, channel: discord.TextChannel = None):
 
     # bot_commands channel
-    if ctx.message.channel.id == 598564981989965854 and channel:
-        role = get_news_role(ctx,channel=channel)
+    if ctx.channel.id == 598564981989965854 and channel:
+        role = get_news_role(ctx, channel)
     
     # Not bot_commands channel, but is a channel in "Libraries" or "Frameworks" categories
-    elif (ctx.message.channel.id != 598564981989965854 or ctx.channel.category_id == 361587040749355018 or ctx.channel.category_id == 361587387538604054) and not channel:
+    elif (ctx.channel.id != 598564981989965854 or ctx.channel.category_id == 361587040749355018 or ctx.channel.category_id == 361587387538604054) and not channel:
         role = get_news_role(ctx)
     else:
         return
@@ -199,7 +180,7 @@ async def pingnews(ctx, version: str, *, args):
 
 @bot.command()
 @commands.has_role("Moderator")
-async def pinglibrarydevelopers(ctx, title, message, *, args):
+async def pinglibrarydevelopers(ctx, title, *, message):
     role = utils.get(ctx.guild.roles, name="Library Developer")
     await role.edit(mentionable=True)
     await ctx.send(f'{role.mention}\n**{title}**\n{message}')
