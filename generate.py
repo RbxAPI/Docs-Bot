@@ -32,7 +32,7 @@ def generate(file,**kwargs):
         file.close()
     
     # Mac / Linux / Unix to Windows Encoding
-    if os.name == "posix":
+    elif os.name == "posix":
         with open(location,'rb') as file:
             content = file.read()
         content.replace(b'\n', b'\r\n')
