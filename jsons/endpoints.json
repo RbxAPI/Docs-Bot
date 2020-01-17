@@ -1,0 +1,22 @@
+{
+  "title": "Roblox API - Reference List",
+  "description": "https://api.roblox.com/docs?useConsolidatedPage=true",
+  "fields": [
+    {
+      "name": "BTRoblox API list",
+      "value": "https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs"
+    },
+    {
+      "name": "Robloxapi Github IO list",
+      "value": "https://robloxapi.github.io/ref/index.html , https://robloxapi.github.io/ref/updates.html"
+    },
+    {
+      "name": "Devforum list",
+      "value": "https://devforum.roblox.com/t/list-of-all-roblox-api-sites/154714/2"
+    },
+    {
+      "name": "Deprecated Endpoints list",
+      "value": "https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889"
+    }
+  ]
+}

@@ -35,8 +35,7 @@ async def ping(ctx):
     resp = await ctx.send('Pong! Loading...', delete_after=1.0)
     diff = resp.created_at - ctx.message.created_at
     totalms = 1000 * diff.total_seconds()
-    emb = discord.Embed()
-    emb.title = "Pong!"
+    emb = discord.Embed(title="Pong!")
     emb.add_field(name="Message time", value=f"{totalms}ms")
     emb.add_field(name="API latency", value=f"{(1000 * bot.latency):.1f}ms")
     await ctx.send(embed=emb)
@@ -44,11 +43,7 @@ async def ping(ctx):
 
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
-    emb = discord.Embed()
-    emb.title = "Codeblocks"
-    emb.description = "Codeblock is a syntax highlighting feature from Markdown that allows us to send source codes that can be read easily. Because Discord's messages support Markdown, we can use codeblocks in Discord too."
-    emb.add_field(name="How to use codeblock?",
-                  value="https://help.github.com/en/articles/creating-and-highlighting-code-blocks#syntax-highlighting")
+    emb = await fetch_embed('codeblock')
     await ctx.send(embed=emb)
 
 
@@ -97,6 +92,12 @@ async def doc(ctx, doc: str, version: str, *, args):
     await ctx.send("Sorry, that keyword was not found in docs specified")
 
 
+async def fetch_embed(filename: str):
+    async with session.get(f'https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/jsons/{filename}.json') as r:
+        j = await r.json(content_type=None)
+    return discord.Embed.from_dict(j)
+
+
 @bot.command()
 async def leaderboard(ctx):
     roles = [(r.name, len(r.members)) for r in ctx.guild.roles if 'news' in r.name]
@@ -109,37 +110,13 @@ async def leaderboard(ctx):
 
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
-    emb = discord.Embed()
-    emb.title = "Roblox API - Reference List"
-    emb.description = "https://api.roblox.com/docs?useConsolidatedPage=true"
-    emb.add_field(name="BTRoblox API list",
-                  value="https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs")
-    emb.add_field(name="Robloxapi Github IO list",
-                  value="https://robloxapi.github.io/ref/index.html , https://robloxapi.github.io/ref/updates.html")
-    emb.add_field(name="Devforum list", value="https://devforum.roblox.com/t/list-of-all-roblox-api-sites/154714/2")
-    emb.add_field(name="Deprecated Endpoints list",
-                  value="https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889")
+    emb = await fetch_embed('endpoints')
     await ctx.send(embed=emb)
 
 
 @bot.command()
 async def resources(ctx):
-    emb = discord.Embed()
-    emb.title = 'Useful Resources'
-    emb.description = "Below is a list of useful resources for multiple programming languages."
-    emb.add_field(name='Lua',
-                  value='Learning Lua - http://www.lua.org/pil/contents.html \nRoblox Developer Hub - '
-                        'https://www.robloxdev.com/resources \nRoblox API Reference - '
-                        'https://www.robloxdev.com/api-reference')
-    emb.add_field(name='JavaScript',
-                  value='Learning Javascript - https://www.codecademy.com/learn/learn-javascript \nJavascript Intro - '
-                        'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction')
-    emb.add_field(name='Python',
-                  value='Learning Python - https://www.codecademy.com/learn/learn-python \nPython Intro - '
-                        'https://wiki.python.org/moin/BeginnersGuide')
-    emb.add_field(name='Java',
-                  value='Learning Java - https://www.codecademy.com/learn/learn-java \nJava Intro - '
-                        'https://docs.oracle.com/javase/tutorial/')
+    emb = await fetch_embed('resources')
     await ctx.send(embed=emb)
 
 
