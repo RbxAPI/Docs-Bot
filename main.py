@@ -1,5 +1,6 @@
 import aiohttp
 import discord
+import yaml
 from discord import utils
 from discord.ext import commands
 
@@ -43,6 +44,10 @@ async def ping(ctx):
 
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
+    async with session.get('https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/yaml/codeblock.yml') as r:
+        c = await r.content
+    data = yaml.load(c, Loader=yaml.CLoader)
+    print(data)
     emb = await fetch_embed('codeblock')
     await ctx.send(embed=emb)
 
