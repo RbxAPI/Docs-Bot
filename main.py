@@ -44,9 +44,6 @@ async def ping(ctx):
 
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
-    async with session.get('https://raw.githubusercontent.com/TCLRainbow/Docs-Bot/rewrite/yaml/codeblock.yml') as r:
-        data = await r.text()
-    print(yaml.load(data, Loader=yaml.CLoader))
     emb = await fetch_embed('codeblock')
     await ctx.send(embed=emb)
 
@@ -97,7 +94,7 @@ async def doc(ctx, doc: str, version: str, *, args):
 
 
 async def fetch_embed(filename: str):
-    async with session.get(f'https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/jsons/{filename}.yml') as r:
+    async with session.get(f'https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/yaml/{filename}.yml') as r:
         j = await r.text()
     return discord.Embed.from_dict(yaml.load(j, Loader=yaml.CLoader))
 
