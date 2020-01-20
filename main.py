@@ -43,7 +43,7 @@ async def ping(ctx):
 
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
-    emb = await fetch_embed('codeblock')
+    emb, _ = await fetch_embed('codeblock')
     await ctx.send(embed=emb)
 
 
@@ -93,7 +93,7 @@ async def doc(ctx, doc: str, version: str, *, args):
 
 
 async def fetch_embed(filename: str):
-    async with session.get(f'https://raw.githubusercontent.com/TCLRainbow/Docs-Bot/rewrite/yaml/{filename}.yml') as r:
+    async with session.get(f'https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/yaml/{filename}.yml') as r:
         j = await r.text()
     d = yaml.load(j, Loader=yaml.CLoader)
     return discord.Embed.from_dict(d), d
@@ -111,13 +111,13 @@ async def leaderboard(ctx):
 
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
-    emb = await fetch_embed('endpoints')
+    emb, _ = await fetch_embed('endpoints')
     await ctx.send(embed=emb)
 
 
 @bot.command()
 async def resources(ctx):
-    emb = await fetch_embed('resources')
+    emb, _ = await fetch_embed('resources')
     await ctx.send(embed=emb)
 
 
