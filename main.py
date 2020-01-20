@@ -22,12 +22,11 @@ async def on_ready():
 @bot.command(aliases=["libs", "libraries", "librarylist"])
 async def list(ctx):
     """Generate server library list"""
-    async with session.get("https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/api_list.json") as r:
-        data = await r.json(content_type=None)
-    embed = discord.Embed(title="Roblox API", description="General library list specific to this server")
-    for language in data:
-        for libraryName in data[language]:
-            embed.add_field(name=libraryName, value=data[language][libraryName])
+    embed, yml = await fetch_embed('libs')
+    for lang in yml["list"]:
+        for lib in lang['libs']:
+            user = bot.get_user(lib["uid"])
+            embed.add_field(name=f'{lib["name"]}({lang["lang"]})', value=f'{lib["author"]}(@{user}) - {lib["url"]}')
     await ctx.send(embed=embed)
 
 
@@ -94,9 +93,10 @@ async def doc(ctx, doc: str, version: str, *, args):
 
 
 async def fetch_embed(filename: str):
-    async with session.get(f'https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/yaml/{filename}.yml') as r:
+    async with session.get(f'https://raw.githubusercontent.com/TCLRainbow/Docs-Bot/rewrite/yaml/{filename}.yml') as r:
         j = await r.text()
-    return discord.Embed.from_dict(yaml.load(j, Loader=yaml.CLoader))
+    d = yaml.load(j, Loader=yaml.CLoader)
+    return discord.Embed.from_dict(d), d
 
 
 @bot.command()

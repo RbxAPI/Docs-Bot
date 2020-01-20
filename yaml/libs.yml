@@ -1,5 +1,125 @@
 title: Roblox API
-description: General library list specific to this server
-libs:
-  - Python:
+description: General library list and frameworks specific to this server
+thumbnail:
+  url: https://avatars1.githubusercontent.com/u/42101452?s=200&v=4
+
+list:
+  - lang: Python
+    libs:
       - name: Pyblox
+        author: Sanjay-B
+        uid: 179201489363795968
+        url: https://github.com/RbxAPI/Pyblox
+
+      - name: Robloxlib
+        author: NoahCristino
+        uid: 283667489471332354
+        url: https://github.com/NoahCristino/robloxlib
+
+      - name: RobloxAPI
+        author: iranathan
+        uid: 427040024513609729
+        url: https://github.com/iranathan/robloxapi
+
+  - lang: JavaScript
+    libs:
+      -  name: Roblox.js
+         author: sentanos
+         uid: 137543748434395136
+         url: https://github.com/sentanos/roblox-js
+
+      - name: Nodeblox.js
+        author: suufi
+        uid: 88410718314971136
+        url: https://github.com/suufi/noblox.js
+
+      - name: Bloxy
+        author: MartinRBX
+        uid: 211122613429338112
+        url: https://github.com/MartinRBX/bloxy
+
+  - lang: TypeScript
+    libs:
+      - name: TSBlox
+        author: Dionysusnu
+        uid: 214262712753061889
+        url: https://github.com/Dionysusnu/tsblox
+
+  - lang: Lua
+    libs:
+      - name: RobloxCommunication
+        author: CrescentCode
+        uid: 131823956255571969
+        url: https://github.com/CrescentCode/RobloxCommunication
+
+      - name: Roblox.lua
+        author: OliverHensworth
+        uid: 269783091583647754
+        url: https://github.com/OliverHensworth/roblox.lua
+
+      - name: RoStrap
+        author: RoStrap
+        uid: 127858186530062336
+        url: https://github.com/RoStrap/RoStrapUI
+
+      - name: Overture
+        author: devSparkle
+        uid: 196716483567419403
+        url: https://github.com/devSparkle/Overture
+
+      - name: MaterialR
+        author: fivefactor
+        uid: 609167831950557348
+        url: https://devforum.roblox.com/t/materialr-ui-framework/330396
+
+  - lang: C#
+    libs:
+      - name: RobloxAPI
+        author: gamenew09
+        uid: 125802100373454848
+        url: https://github.com/gamenew09/RobloxAPI
+
+  - lang: PHP
+    libs:
+      - name: Roblophp
+        author: WebDevTrop
+        uid: 217971702733209600
+        url: https://github.com/WebDevTrop/roblophp
+
+  - lang: Java
+    libs:
+      - name: Javablox
+        author: Pythonic-Rainbow
+        uid: 264756129916125184
+        url: https://github.com/Pythonic-Rainbow/Javablox
+
+      - name: Roblox4j
+        author: PizzaCrust
+        uid: 185697212976726018
+        url: https://github.com/PizzaCrust/Roblox4j
+
+  - lang: Kotlin
+    libs:
+      - name: KotlinRoblox
+        author: PizzaCrust
+        uid: 185697212976726018
+        url: https://github.com/PizzaCrust/KotlinRoblox
+
+      - name: Roblox.kt
+        author: FreeLineTM
+        uid: 179256560139108352
+        url: https://github.com/FreeLineTM/roblox.kt
+
+  - lang: Ruby
+    libs:
+      - name: Roblox.rb
+        author: OliverHensworth
+        uid: 269783091583647754
+        url: https://github.com/OliverHensworth/roblox.rb
+
+  - lang: C++
+    libs:
+      - name: Cblox
+        author: Meqolo
+        uid: 298012370217992192
+        url: https://github.com/Meqolo/cblox
