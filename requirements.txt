@@ -1,1 +1,2 @@
+PyYAML
 discord.py>=1.2.5
