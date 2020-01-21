@@ -41,7 +41,7 @@ def generate(file,**kwargs):
         file.close()
     
     # Mac / Linux / Unix to Windows Encoding
-    if os.name == "posix":
+    elif os.name == "posix":
         with open(location,'rb') as file:
             content = file.read()
         content.replace(b'\n', b'\r\n')
@@ -55,6 +55,10 @@ def generate(file,**kwargs):
         exit()
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     generate('rewrite/requirements.txt')
     install_requirements()
     generate('rewrite/main.py')
+=======
+    generate('rewrite/main.py')
+>>>>>>> 97cd6873fe00bb5ce17f41467ba3dc1533e4e226

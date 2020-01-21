@@ -1,0 +1,23 @@
+title: Useful Resources
+description: Below is a list of useful resources for multiple programming languages.
+fields:
+  - name: Lua
+    value: |
+      Learning Lua - http://www.lua.org/pil/contents.html
+      Roblox Developer Hub - https://www.robloxdev.com/resources
+      Roblox API Reference - https://www.robloxdev.com/api-reference
+
+  - name: JavaScript
+    value: |
+      Learning Javascript - https://www.codecademy.com/learn/learn-javascript
+      Javascript Intro - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction
+
+  - name: Python
+    value: |
+      Learning Python - https://www.codecademy.com/learn/learn-python
+      Python Intro - https://wiki.python.org/moin/BeginnersGuide
+
+  - name: Java
+    value: |
+      Learning Java - https://www.codecademy.com/learn/learn-java
+      Java Intro - https://docs.oracle.com/javase/tutorial/
