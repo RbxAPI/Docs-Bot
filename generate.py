@@ -55,10 +55,6 @@ def generate(file,**kwargs):
         exit()
 
 if __name__ == '__main__':
-<<<<<<< HEAD
     generate('rewrite/requirements.txt')
     install_requirements()
     generate('rewrite/main.py')
-=======
-    generate('rewrite/main.py')
->>>>>>> 97cd6873fe00bb5ce17f41467ba3dc1533e4e226
