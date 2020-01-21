@@ -1,6 +1,15 @@
 import requests
 import os
 
+# Requirements install per every bot start / restart
+def install_requirements():
+    with open('requirements.txt','r',encoding='utf-8') as file:
+
+        # Hacky way to get rid of '/n' in list items
+        requirements = list(map(lambda requirement: requirement.strip(), file.readlines()))
+        for requirement in requirements:
+            os.system(f'pip install {requirement}')
+
 
 # File dynamically loads from git so repo changes are made near constantly
 def generate(file,**kwargs):
@@ -46,4 +55,6 @@ def generate(file,**kwargs):
         exit()
 
 if __name__ == '__main__':
+    generate('rewrite/requirements.txt')
+    install_requirements()
     generate('rewrite/main.py')
