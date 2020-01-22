@@ -93,9 +93,9 @@ async def doc(ctx, doc: str, version: str, *, args):
 
 
 async def fetch_embed(filename: str):
-    async with session.get(f'https://raw.githubusercontent.com/RbxAPI/Docs-Bot/rewrite/yaml/{filename}.yml') as r:
-        j = await r.text()
-    d = yaml.load(j, Loader=yaml.CLoader)
+    with open(f'yaml/{filename}.yml') as file:
+        j = file.read()
+    d = yaml.load(j, Loader=yaml.FullLoader)
     return discord.Embed.from_dict(d), d
 
 
