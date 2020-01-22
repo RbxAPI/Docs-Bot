@@ -55,10 +55,14 @@ def generate(file,**kwargs):
         exit()
 
 if __name__ == '__main__':
-<<<<<<< HEAD
+
+    # Install requirements first (add check??)
     generate('rewrite/requirements.txt')
     install_requirements()
+
+    # Cached files
+    generate('rewrite/yaml/codeblock.yml')
+    generate('rewrite/yaml/endpoints.yml')
+    generate('rewrite/yaml/libs.yml')
+    generate('rewrite/yaml/resources.yml')
     generate('rewrite/main.py')
-=======
-    generate('rewrite/main.py')
->>>>>>> 97cd6873fe00bb5ce17f41467ba3dc1533e4e226
