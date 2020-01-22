@@ -55,11 +55,8 @@ def generate(file,**kwargs):
         exit()
 
 if __name__ == '__main__':
-<<<<<<< HEAD
 
     # Install requirements first (add check??)
-=======
->>>>>>> 1eba0d31c36317d07f22a08be917dbe0732ce47b
     generate('rewrite/requirements.txt')
     install_requirements()
 
