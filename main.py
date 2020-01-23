@@ -7,7 +7,7 @@ from discord.ext import commands
 import docstoken
 
 description = "Roblox API Server Documentation Bot"
-bot = commands.Bot(command_prefix='??', description=description, help_command=None)
+bot = commands.Bot(command_prefix='?', description=description, help_command=None)
 session = None
 
 
