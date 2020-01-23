@@ -7,7 +7,7 @@ from discord.ext import commands
 import docstoken
 
 description = "Roblox API Server Documentation Bot"
-bot = commands.Bot(command_prefix='?', description=description, help_command=None)
+bot = commands.Bot(command_prefix='??', description=description, help_command=None)
 session = None
 
 
@@ -44,6 +44,12 @@ async def ping(ctx):
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
     emb, _ = await fetch_embed('codeblock')
+    await ctx.send(embed=emb)
+
+
+@bot.command(aliases=["cookies"])
+async def cookie(ctx):
+    emb, _ = await fetch_embed('cookie')
     await ctx.send(embed=emb)
 
 

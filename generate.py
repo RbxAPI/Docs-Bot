@@ -65,4 +65,5 @@ if __name__ == '__main__':
     generate('rewrite/yaml/endpoints.yml')
     generate('rewrite/yaml/libs.yml')
     generate('rewrite/yaml/resources.yml')
+    generate('rewrite/yaml/cookie.yml')
     generate('rewrite/main.py')
