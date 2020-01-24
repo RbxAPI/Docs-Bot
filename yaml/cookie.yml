@@ -6,6 +6,6 @@ fields:
   - name: How to find my cookie on Firefox?
     value: Click the hamburger icon on the right-hand side of the toolbar. Go to **Web Developer**. Click **Storage Inspector** and the **Cookies** button on the menu to the left. Click the dropdown until you find **www.roblox.com**. Your cookie is the value assigned to the key named ``.ROBLOSECURITY``.
   - name: How to find my cookie on Safari?
-    value: Go to **Preferences**, **Advanced** and select **Show Develop menu in menu bar**. Click the **Develop** tab. Click **Show Web Inspector**. Click the **Storage** tab and then click **Cookies**. Click the dropdown until you find **www.roblox.com**. Your cookie is the value assigned to the key name ``.ROBLOSECURITY``.
+    value: Go to **Preferences**, **Advanced** and select **Show Develop menu in menu bar**. Click the **Develop** tab. Click **Show Web Inspector**. Click the **Storage** tab and then click **Cookies**. Click the dropdown until you find **www.roblox.com**. Your cookie is the value assigned to the key named ``.ROBLOSECURITY``.
   - name: How to find my cookie on Edge?
-    value: Click the elipsis (...) on the right-hand side of the toolbar. Go to **More tools**. Click the **Developer Tools** button. Click the **More Tools** button (icon next to **Console**). Click **Storage**. Ckick the dropdown until you find **www.roblox.com**. Your cookie is the value assigned to the key name ``.ROBLOSECURITY``.
+    value: Click the elipsis (...) on the right-hand side of the toolbar. Go to **More tools**. Click the **Developer Tools** button. Click the **More Tools** button (icon next to **Console**). Click **Storage**. Ckick the dropdown until you find **www.roblox.com**. Your cookie is the value assigned to the key named ``.ROBLOSECURITY``.
