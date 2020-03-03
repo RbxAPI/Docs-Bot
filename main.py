@@ -1,8 +1,10 @@
 import aiohttp
 import discord
 import yaml
+import emoji
 from discord import utils
 from discord.ext import commands
+import discord.emoji
 
 import docstoken
 
@@ -170,12 +172,25 @@ async def poll(ctx, *, args):
     await ctx.send(f'{role.mention}')
     await role.edit(mentionable=False)
     embed = discord.Embed(Title="Poll")
-    embed.add_field(name="Question", value=f'{args}')
     embed.set_author(name="Poll", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-    embed.set_footer(text = "👍 for upvote or 👎 for downvote")
-    message = await ctx.send(embed=embed)
-    await message.add_reaction('👍')
-    await message.add_reaction('👎')
+    hasEmojis = ((args.find('[') and args.find(']')) != -1) # Regex?
+
+    if hasEmojis:
+        # Isolate Emojis (supports only non-custom emoji)
+        emojis = (' '.join(x for x in sorted(args[args.find('['):args.find(']')+1]) if x in emoji.UNICODE_EMOJI or x in ctx.guild.emojis)).split()
+
+        args = args[args.find(']')+1:]
+        embed.add_field(name="Question", value=f'{args}')
+        embed.set_footer(text='React below to cast a vote')
+        message = await ctx.send(embed=embed)
+        for _emoji in emojis:
+            await message.add_reaction(_emoji)
+    else:
+        embed.add_field(name="Question", value=f'{args}')
+        embed.set_footer(text="👍 for upvote or 👎 for downvote")
+        message = await ctx.send(embed=embed)
+        await message.add_reaction('👍')
+        await message.add_reaction('👎')
 
 
 @bot.command()
