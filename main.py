@@ -152,6 +152,21 @@ async def subscribe(ctx, channel: discord.TextChannel = None):
         await ctx.author.add_roles(role)
         await ctx.message.add_reaction('👍')
 
+@bot.command()
+@commands.has_role("Library Developer")
+async def poll(ctx, *, args):
+    role = get_news_role(ctx)
+    await role.edit(mentionable=True)
+    await ctx.send(f'{role.mention}')
+    await role.edit(mentionable=False)
+    embed = discord.Embed(Title="Poll")
+    embed.add_field(name="Question", value=f'{args}')
+    embed.set_author(name ="Poll", icon_url = "https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+    embed.set_footer(text = "👍 for upvote or 👎 for downvote")
+    message = await ctx.send(embed=embed)
+    await message.add_reaction('👍')
+    await message.add_reaction('👎')
+
 
 @bot.command()
 @commands.has_role("Library Developer")
