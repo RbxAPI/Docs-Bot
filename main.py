@@ -7,8 +7,6 @@ from discord import utils
 from discord.ext import commands
 import discord.emoji
 
-import subprocess
-
 import docstoken
 
 description = "Roblox API Server Documentation Bot"
@@ -179,9 +177,7 @@ async def poll(ctx, *, args):
     hasEmojis = ((args.find('[') and args.find(']')) != -1) # Regex?
 
     if hasEmojis:
-        # Isolate Emojis (supports only non-custom emoji)
-        emojis = (' '.join(x for x in sorted(args[args.find('['):args.find(']')+1]) if x in emoji.UNICODE_EMOJI or x in ctx.guild.emojis)).split()
-
+        emojis = (args[args.find('[')+1:args.find(']')-1]).split()
         args = args[args.find(']')+1:]
         embed.add_field(name="Question", value=f'{args}')
         embed.set_footer(text='React below to cast a vote')
