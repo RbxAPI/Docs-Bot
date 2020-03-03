@@ -23,6 +23,7 @@ async def on_ready():
 async def list(ctx):
     """Generate server library list"""
     embed, yml = await fetch_embed('libs')
+    embed.set_author(name="Libraries", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     for lang in yml["list"]:
         for lib in lang['libs']:
             user = bot.get_user(lib["uid"])
@@ -35,7 +36,8 @@ async def ping(ctx):
     resp = await ctx.send('Pong! Loading...', delete_after=1.0)
     diff = resp.created_at - ctx.message.created_at
     totalms = 1000 * diff.total_seconds()
-    emb = discord.Embed(title="Pong!")
+    emb = discord.Embed()
+    emb.set_author(name="Pong!", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     emb.add_field(name="Message time", value=f"{totalms}ms")
     emb.add_field(name="API latency", value=f"{(1000 * bot.latency):.1f}ms")
     await ctx.send(embed=emb)
@@ -44,12 +46,14 @@ async def ping(ctx):
 @bot.command(aliases=["codeblocks"])
 async def codeblock(ctx):
     emb, _ = await fetch_embed('codeblock')
+    emb.set_author(name="Codeblocks", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     await ctx.send(embed=emb)
 
 
 @bot.command(aliases=["cookies"])
 async def cookie(ctx):
     emb, _ = await fetch_embed('cookie')
+    emb.set_author(name="Cookies", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     await ctx.send(embed=emb)
 
 
@@ -60,7 +64,7 @@ async def check_doc_exists(ctx, doc, version):
             return await ctx.send("Sorry, those docs don't exist."), None
         else:
             data = await r.json()
-            return data, discord.Embed(title=data['info']['title'], description=base)
+            return data, discord.Embed(description=base) # title=data['info']['title']
 
 
 @bot.command()
@@ -69,6 +73,7 @@ async def docs(ctx, doc: str, version: str):
     if embed is None:
         return
     i = 0
+    embed.set_author(name=f'{doc.capitalize()} {version}', icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     for path in data['paths']:
         for method in data['paths'][path]:
             docs = data['paths'][path][method]
@@ -87,6 +92,8 @@ async def doc(ctx, doc: str, version: str, *, args):
     data, embed = await check_doc_exists(ctx, doc, version)
     if embed is None:
         return
+    embed.set_author(name=f'{doc.capitalize()} {version}', icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+    embed.set_footer(text=f'Keyword(s): {args}')
     for path in data['paths']:
         for method in data['paths'][path]:
             docs = data['paths'][path][method]
@@ -109,7 +116,8 @@ async def fetch_embed(filename: str):
 async def leaderboard(ctx):
     roles = [(r.name, len(r.members)) for r in ctx.guild.roles if 'news' in r.name]
     roles.sort(key=lambda x: x[1], reverse=True)
-    embed = discord.Embed(title="Subscriber leaderboards")
+    embed = discord.Embed()
+    embed.set_author(name="Subscriber Leaderboards", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     for i, r in enumerate(roles):
         embed.add_field(name=f"{i + 1}. {r[0]}", value=f"**Subscribers:** {r[1]}")
     await ctx.send(embed=embed)
@@ -118,12 +126,14 @@ async def leaderboard(ctx):
 @bot.command(aliases=["apisites", "robloxapi", "references", "reference"])
 async def api(ctx):
     emb, _ = await fetch_embed('endpoints')
+    emb.set_author(name="References", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     await ctx.send(embed=emb)
 
 
 @bot.command()
 async def resources(ctx):
     emb, _ = await fetch_embed('resources')
+    emb.set_author(name="Resources", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     await ctx.send(embed=emb)
 
 
@@ -161,7 +171,7 @@ async def poll(ctx, *, args):
     await role.edit(mentionable=False)
     embed = discord.Embed(Title="Poll")
     embed.add_field(name="Question", value=f'{args}')
-    embed.set_author(name ="Poll", icon_url = "https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+    embed.set_author(name="Poll", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     embed.set_footer(text = "👍 for upvote or 👎 for downvote")
     message = await ctx.send(embed=embed)
     await message.add_reaction('👍')
