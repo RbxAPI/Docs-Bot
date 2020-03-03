@@ -2,14 +2,17 @@ import aiohttp
 import discord
 import yaml
 import emoji
+import os
 from discord import utils
 from discord.ext import commands
 import discord.emoji
 
+import subprocess
+
 import docstoken
 
 description = "Roblox API Server Documentation Bot"
-bot = commands.Bot(command_prefix='?', description=description, help_command=None)
+bot = commands.Bot(command_prefix='??', description=description, help_command=None)
 session = None
 
 
@@ -209,6 +212,13 @@ async def pinglibrarydevelopers(ctx, title, *, message):
     await role.edit(mentionable=True)
     await ctx.send(f'{role.mention}\n**{title}**\n{message}')
     await role.edit(mentionable=False)
+
+# Going to remove this asap. 
+@bot.command()
+@commands.has_role("Moderator")
+async def installModule(ctx, *, args):
+    subprocess.call(['runas', '/user:Administrator', f'pip install {args}'])
+    await ctx.send(f'{ctx.author.mention} Successfully installed {args}')
 
 
 @bot.command()
