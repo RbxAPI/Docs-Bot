@@ -51,11 +51,6 @@ list:
         uid: 131823956255571969
         url: https://github.com/CrescentCode/RobloxCommunication
 
-      - name: Roblox.lua
-        author: OliverHensworth
-        uid: 269783091583647754
-        url: https://github.com/OliverHensworth/roblox.lua
-
       - name: RoStrap
         author: RoStrap
         uid: 127858186530062336
@@ -108,13 +103,6 @@ list:
         author: FreeLineTM
         uid: 179256560139108352
         url: https://github.com/FreeLineTM/roblox.kt
-
-  - lang: Ruby
-    libs:
-      - name: Roblox.rb
-        author: OliverHensworth
-        uid: 269783091583647754
-        url: https://github.com/OliverHensworth/roblox.rb
 
   - lang: C++
     libs:
