@@ -2,6 +2,9 @@
 .idea
 docstoken.py
 
+# Ignore database file (security)
+storage.db
+
 # Testing file, ignore
 ignore.py
 main_ignore.py
