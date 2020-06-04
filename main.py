@@ -1,11 +1,5 @@
-import aiohttp
 import discord
-import yaml
-import emoji
-import os
-from discord import utils
 from discord.ext import commands
-import discord.emoji
 
 import docstoken
 
