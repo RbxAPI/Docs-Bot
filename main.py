@@ -14,7 +14,7 @@ available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.chan
 
 # Bot Init
 description = "Roblox API Server Documentation Bot"
-bot = commands.Bot(command_prefix='??', description=description, help_command=None)
+bot = commands.Bot(command_prefix='?', description=description, help_command=None)
 
 
 @bot.event
