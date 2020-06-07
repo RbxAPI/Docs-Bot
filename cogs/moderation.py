@@ -127,6 +127,12 @@ class Moderation(commands.Cog):
         
         # Fetch data from database
         query = db.modEntry.fetch(member.id)
+
+        # If no data exists for user, abort
+        if (len(query) == 0):
+            await ctx.send(f'User "{member.id}" has no infractions.')
+            return
+
         emb = discord.Embed()
         emb.set_author(name="Moderation", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
@@ -138,7 +144,54 @@ class Moderation(commands.Cog):
                 i = 0
             i += 1
         await ctx.send(embed=emb)
+    
+    @commands.command()
+    @commands.has_role("Moderator")
+    async def reason(self, ctx, id, *, message):
+        sent = db.modEntry.update(id, reason=message)
+        if sent:
+            await ctx.send(f'Case Number "{id}" was updated successfully.')
+            return
+        await ctx.send(f'Case Number "{id}" failed to update.')
+    
+    @commands.command()
+    @commands.has_role("Moderator")
+    async def duration(self, ctx, id, *, _duration):
+        sent = db.modEntry.update(id, _duration=_duration)
+        if sent:
+            await ctx.send(f'Case Number "{id}" was updated successfully.')
+            return
+        await ctx.send(f'Case Number "{id}" failed to update.')
+    
+    @commands.command()
+    @commands.has_role("Moderator")
+    async def clean(self, ctx, amount, member: discord.Member = None):
+        log_channel = self.bot.get_channel(709262930750865440) # moderation-logs channel
+        emb = discord.Embed()
+        emb.set_author(name="Moderation", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+
+        # If specific memeber is not specified
+        if not member:
+            emb.add_field(name="Message (Clean)", value=f'<#{ctx.message.channel.id}>', inline=False)
+            emb.add_field(name="Amount", value=f'{amount}', inline=False)
+            emb.add_field(name="Moderator", value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})', inline=False)
+            await ctx.message.channel.purge(limit=int(amount)+1)
+            await log_channel.send(embed=emb)
+            return
         
+        # If specific member is specified
+        emb.add_field(name="Message (Clean)", value=f'<#{ctx.message.channel.id}>', inline=False)
+        emb.add_field(name="Amount", value=f'{amount}', inline=False)
+        emb.add_field(name="From", value=f'{member.mention} ({member.id})', inline=False)
+        emb.add_field(name="Moderator", value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})', inline=False)
+
+        def is_member():
+            return (ctx.message.author.id == member.id)
+        
+        await ctx.message.channel.purge(limit=int(amount)+1, check=is_member)
+        await log_channel.send(embed=emb)
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
