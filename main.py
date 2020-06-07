@@ -4,11 +4,11 @@ from discord.ext import commands
 import docstoken
 
 # A list containing all cogs that we want to load
-available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.channels', 'cogs.moderation', 'cogs.verification']
+available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.channels', 'cogs.moderation', 'cogs.verification', 'cogs.tagging']
 
 # Bot Init
 description = "Roblox API Server Documentation Bot"
-bot = commands.Bot(command_prefix=';', description=description, help_command=None)
+bot = commands.Bot(command_prefix='?', description=description, help_command=None)
 
 
 @bot.event
