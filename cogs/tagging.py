@@ -39,7 +39,7 @@ class Tagging(commands.Cog):
     @commands.command()
     @commands.has_role("Library Developer")
     async def tag_add(self, ctx, name, *, content: str):
-        result = db.taggingEntry.check_indentifier(name)
+        result = db.taggingEntry.fetch(name, ctx.message.channel.id)
 
         # If Tag already exists, prevent duplicates
         if result:
