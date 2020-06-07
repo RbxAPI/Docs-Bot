@@ -7,6 +7,7 @@ class Maintenance(commands.Cog):
     
     # Maintenance Commands
     @commands.command(name='reload')
+    @commands.has_role("Moderator")
     async def reload(self, ctx, *, name: str):
         try:
             self.bot.unload_extension(name)
