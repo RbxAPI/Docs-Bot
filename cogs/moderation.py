@@ -121,7 +121,7 @@ class Moderation(commands.Cog):
         await log_channel.send(embed=emb)
     
     @commands.command()
-    @commands.has_role("Moderator")
+    @commands.has_role("Library Developer" or "Moderator")
     async def infractions(self, ctx, member: discord.Member):
         i = 0
         
