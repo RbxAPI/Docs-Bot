@@ -186,8 +186,8 @@ class Moderation(commands.Cog):
         emb.add_field(name="From", value=f'{member.mention} ({member.id})', inline=False)
         emb.add_field(name="Moderator", value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})', inline=False)
 
-        def is_member():
-            return (ctx.message.author.id == member.id)
+        def is_member(message):
+            return (message.author.id == member.id)
         
         await ctx.message.channel.purge(limit=int(amount)+1, check=is_member)
         await log_channel.send(embed=emb)
