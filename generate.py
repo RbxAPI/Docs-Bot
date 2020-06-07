@@ -60,10 +60,21 @@ if __name__ == '__main__':
     generate('rewrite/requirements.txt')
     install_requirements()
 
-    # Cached files
+    # Cached Hard-coded files
     generate('rewrite/yaml/codeblock.yml')
     generate('rewrite/yaml/endpoints.yml')
     generate('rewrite/yaml/libs.yml')
     generate('rewrite/yaml/resources.yml')
     generate('rewrite/yaml/cookie.yml')
+    
+    # Cached Main file
     generate('rewrite/main.py')
+
+    # Cached Cogs
+    generate('rewrite/cogs/maintenance.py')
+    generate('rewrite/cogs/logging.py')
+    generate('rewrite/cogs/utility.py')
+    generate('rewrite/cogs/channels.py')
+    generate('rewrite/cogs/moderation.py')
+    generate('rewrite/cogs/verification.py')
+    generate('rewrite/cogs/tagging.py')
