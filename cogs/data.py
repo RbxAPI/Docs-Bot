@@ -8,6 +8,7 @@ class Data:
         self.connector = sqlite3.connect('storage.db')
         self.modEntry = self.modEntry(self)
         self.verificationEntry = self.verificationEntry(self)
+        self.taggingEntry = self.taggingEntry(self)
 
         # Setup 'modLogs' Databases if isn't valid
         try:
@@ -42,6 +43,7 @@ class Data:
             # Tagging table container
             connector.execute('''CREATE TABLE tagging (
                 CHANNELID BIGINT NOT NULL,
+                NAME TEXT NOT NULL,
                 CONTENT TEXT NOT NULL,
                 DATE TEXT NOT NULL
             );''')
@@ -138,6 +140,82 @@ class Data:
                 self.cursor.execute('''SELECT * FROM verification''')
                 for discordid, username, userid, date in self.cursor.fetchall():
                     if discordid == value:
+                        return True
+                return False
+            except sqlite3.Error as error:
+                print(f'{error}')
+                return False
+    
+
+    class taggingEntry:
+
+        def __init__(self, Data):
+            self.Data = Data
+            self.connector = Data.connector
+            self.cursor = self.connector.cursor()
+        
+        def insert(self, channelid, name, content, date):
+            try:
+                self.cursor.execute('''INSERT INTO tagging (CHANNELID, NAME, CONTENT, DATE) VALUES (?, ?, ?, ?);''', (channelid, name, content, date))
+                self.connector.commit()
+            except sqlite3.Error as error:
+                print(f'{error}')
+        
+        def fetch(self, indentifier, channelIdentifier):
+            index = 0
+            try:
+                self.cursor.execute('''SELECT * FROM tagging''')
+            except sqlite3.Error as error:
+                print(f'{error}')
+            
+            for channelid, name, content, date in self.cursor.fetchall():
+                index += 1
+                if name == indentifier and channelid == channelIdentifier:
+                    return {
+                        "index": index,
+                        "channelid": channelid,
+                        "content": content,
+                        "date": date
+                    }
+            return None
+        
+        def fetchAll(self, channelIdentifier):
+            index = 0
+            result = []
+            try:
+                self.cursor.execute('''SELECT * FROM tagging''')
+            except sqlite3.Error as error:
+                print(f'{error}')
+            
+            for channelid, name, content, date in self.cursor.fetchall():
+                index += 1
+                if channelid == channelIdentifier:
+                    result.append({
+                        "index": index,
+                        "channelid": channelid,
+                        "name": name,
+                        "content": content,
+                        "date": date
+                    })
+            return result
+        
+        def update(self, id, **kwargs):
+            content = kwargs.get("content", None)
+            date = kwargs.get("date", None)
+            try:
+                if content and date:
+                    self.cursor.execute('''UPDATE tagging SET CONTENT = (?) WHERE rowid = (?);''', (content, id))
+                    self.cursor.execute('''UPDATE tagging SET DATE = (?) WHERE rowid = (?);''', (date, id))
+            except sqlite3.Error as error:
+                print(f'{error}')
+                return False
+            return True
+        
+        def check_indentifier(self, indentifier):
+            try:
+                self.cursor.execute('''SELECT * FROM tagging''')
+                for channelid, name, content, date in self.cursor.fetchall():
+                    if name == indentifier:
                         return True
                 return False
             except sqlite3.Error as error:
