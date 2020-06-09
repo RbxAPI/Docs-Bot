@@ -1,3 +1,5 @@
 PyYAML
 discord.py>=1.2.5
 emoji
+python-dotenv
+requests

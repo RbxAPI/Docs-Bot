@@ -1,3 +1,4 @@
+import os
 import discord
 from discord.ext import commands
 
@@ -9,7 +10,7 @@ class Logging(commands.Cog):
     # Message Logging
     @commands.Cog.listener()
     async def on_message_delete(self, message):
-        channel = self.bot.get_channel(709176997233950790) # message-logs channel
+        channel = self.bot.get_channel(os.getenv("MESSAGE_LOGS_CHANNEL")) # message-logs channel
         
         # Avoid duplicate channel; i.e message delete from log channel
         if message.channel == channel:
@@ -27,7 +28,7 @@ class Logging(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        channel = self.bot.get_channel(709176997233950790) # message-logs channel
+        channel = self.bot.get_channel(os.getenv("MESSAGE_LOGS_CHANNEL")) # message-logs channel
     
         # If message data is malformed or blank, return
         if (before.content == "") or (after.content == ""):

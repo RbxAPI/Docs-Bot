@@ -1,3 +1,4 @@
+import os
 import discord
 from discord.ext import commands
 from discord import utils
@@ -19,7 +20,7 @@ class Verification(commands.Cog):
     # Verification on member join
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        channel = self.bot.get_channel(718621539653648424) # join-logs channel
+        channel = self.bot.get_channel(os.getenv("JOIN_LOGS_CHANNEL")) # join-logs channel
         role = utils.get(member.guild.roles, name="Verified")
         response = requests.get(f'https://verify.eryn.io/api/user/{member.id}').json()
         
@@ -47,7 +48,7 @@ class Verification(commands.Cog):
     async def verify(self, ctx, username : str = None, *, keyPhrase : str = None):
         member = ctx.message.author
         role = utils.get(ctx.guild.roles, name="Verified")
-        channel = self.bot.get_channel(718621539653648424) # join-logs channel
+        channel = self.bot.get_channel(os.getenv("JOIN_LOGS_CHANNEL")) # join-logs channel
         response = requests.get(f'https://verify.eryn.io/api/user/{member.id}').json()
 
         result = db.verificationEntry.check_discordid(member.id)
@@ -118,7 +119,7 @@ class Verification(commands.Cog):
     async def force_verify(self, ctx, username, member: discord.Member):
         role = utils.get(ctx.guild.roles, name="Verified")
         userid = requests.get(f'https://api.roblox.com/users/get-by-username?&username={username}').json()["Id"]
-        channel = self.bot.get_channel(718621539653648424) # join-logs channel
+        channel = self.bot.get_channel(os.getenv("JOIN_LOGS_CHANNEL")) # join-logs channel
         
         # Prevent overwrite
         result = db.verificationEntry.check_discordid(member.id)
