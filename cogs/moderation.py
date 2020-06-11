@@ -1,3 +1,4 @@
+import os
 import discord
 from discord.ext import commands
 from discord import utils
@@ -28,7 +29,7 @@ class Moderation(commands.Cog):
     async def mute(self, ctx, member: discord.Member, duration, *, message):
         role = utils.get(ctx.guild.roles, name="Muted")
         channel = ctx.message.channel
-        log_channel = self.bot.get_channel(709262930750865440) # moderation-logs channel
+        log_channel = self.bot.get_channel(os.getenv("MODERATION_LOGS_CHANNEL")) # moderation-logs channel
 
         # Create default embed
         emb = discord.Embed()
@@ -67,7 +68,7 @@ class Moderation(commands.Cog):
     async def unmute(self, ctx, member: discord.Member, *, message):
         role = utils.get(ctx.guild.roles, name="Muted")
         channel = ctx.message.channel
-        log_channel = self.bot.get_channel(709262930750865440) # moderation-logs channel
+        log_channel = self.bot.get_channel(os.getenv("MODERATION_LOGS_CHANNEL")) # moderation-logs channel
 
         # Create default embed
         emb = discord.Embed()
@@ -103,7 +104,7 @@ class Moderation(commands.Cog):
     @commands.has_role("Library Developer" or "Moderator")
     async def warn(self, ctx, member: discord.Member, *, message):
         channel = ctx.message.channel
-        log_channel = self.bot.get_channel(709262930750865440) # moderation-logs channel
+        log_channel = self.bot.get_channel(os.getenv("MODERATION_LOGS_CHANNEL")) # moderation-logs channel
 
         # Create default embed
         emb = discord.Embed()
@@ -166,7 +167,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_role("Moderator")
     async def clean(self, ctx, amount, member: discord.Member = None):
-        log_channel = self.bot.get_channel(709262930750865440) # moderation-logs channel
+        log_channel = self.bot.get_channel(os.getenv("MODERATION_LOGS_CHANNEL")) # moderation-logs channel
         emb = discord.Embed()
         emb.set_author(name="Moderation", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')

@@ -1,7 +1,9 @@
+import os
 import discord
 from discord.ext import commands
 
-import docstoken
+from dotenv import load_dotenv
+load_dotenv()
 
 # A list containing all cogs that we want to load
 available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.channels', 'cogs.moderation', 'cogs.verification', 'cogs.tagging']
@@ -24,4 +26,4 @@ if __name__ == '__main__':
         bot.load_extension(cog)
     
     # Run Bot
-    bot.run(docstoken.discord)
+    bot.run(os.getenv("DISCORD_TOKEN"))
