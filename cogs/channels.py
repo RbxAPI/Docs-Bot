@@ -27,11 +27,11 @@ class Channels(commands.Cog):
     async def subscribe(self, ctx, channel: discord.TextChannel = None):
 
         # bot_commands channel
-        if ctx.channel.id == os.getenv("BOT_COMMANDS_CHANNEL") and channel:
+        if ctx.channel.id == int(os.getenv("BOT_COMMANDS_CHANNEL")) and channel:
             role = self.get_news_role(ctx, channel)
         
         # Not bot_commands channel, but is a channel in "Libraries" or "Frameworks" categories
-        elif (ctx.channel.id != os.getenv("BOT_COMMANDS_CHANNEL") or ctx.channel.category_id == os.getenv("LIBRARIES_CATEGORY") or ctx.channel.category_id == os.getenv("FRAMEWORKS_CATEGORY")) and not channel:
+        elif (ctx.channel.id != int(os.getenv("BOT_COMMANDS_CHANNEL")) or ctx.channel.category_id == int(os.getenv("LIBRARIES_CATEGORY")) or int(ctx.channel.category_id == os.getenv("FRAMEWORKS_CATEGORY"))) and not channel:
             role = self.get_news_role(ctx)
         else:
             return
