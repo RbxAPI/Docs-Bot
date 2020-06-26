@@ -53,10 +53,10 @@ class Tagging(commands.Cog):
     @commands.has_role("Library Developer")
     async def index(self, ctx, name: str):
         result = db.taggingEntry.fetch(name, ctx.message.channel.id)
-        if result is None:
-            await ctx.send(f'Tag with identifier "{name}" does not exist.')
+        if result:
+            await ctx.send(f'Tag with identifier "{name}" has an index of "{result["index"]}"')
             return
-        await ctx.send(f'Tag with identifier "{name}" has an index of "{result["index"]}"')
+        await ctx.send(f'Tag with identifier "{name}" does not exist.')
 
     @tag.command()
     @commands.has_role("Library Developer")
