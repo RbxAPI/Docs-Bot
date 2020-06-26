@@ -2,13 +2,14 @@ import sqlite3
 
 connector = sqlite3.connect('storage.db')
 
+
 class Data:
 
     def __init__(self):
         self.connector = sqlite3.connect('storage.db')
-        self.modEntry = self.modEntry(self)
-        self.verificationEntry = self.verificationEntry(self)
-        self.taggingEntry = self.taggingEntry(self)
+        self.modEntry = self.ModEntry(self)
+        self.verificationEntry = self.VerificationEntry(self)
+        self.taggingEntry = self.TaggingEntry(self)
 
         # Setup 'modLogs' Databases if isn't valid
         try:
@@ -23,7 +24,7 @@ class Data:
             );''')
 
         except Exception as error:
-            pass # Database table is already created
+            pass  # Database table is already created
 
         # Setup 'verification' Database if isn't valid
         try:
@@ -36,7 +37,7 @@ class Data:
             );''')
 
         except Exception as error:
-            pass # Database table is already created
+            pass  # Database table is already created
 
         # Setup 'tagging' Database if isn't valid
         try:
@@ -49,22 +50,24 @@ class Data:
             );''')
 
         except Exception as error:
-            pass # Database table is already created
-    
-    class modEntry:
+            pass  # Database table is already created
 
-        def __init__(self, Data):
-            self.Data = Data
-            self.connector = Data.connector
+    class ModEntry:
+
+        def __init__(self, data):
+            self.Data = data
+            self.connector = data.connector
             self.cursor = self.connector.cursor()
-        
+
         def insert(self, action, duration, reason, moderator, target, date):
             try:
-                self.cursor.execute('''INSERT INTO modLogs (ACTION, DURATION, REASON, MODERATOR, TARGET, DATE) VALUES (?, ?, ?, ?, ?, ?);''', (action, duration, reason, moderator, target, date))
+                self.cursor.execute(
+                    '''INSERT INTO modLogs (ACTION, DURATION, REASON, MODERATOR, TARGET, DATE) VALUES (?, ?, ?, ?, ?, ?);''',
+                    (action, duration, reason, moderator, target, date))
                 self.connector.commit()
             except sqlite3.Error as error:
                 print(f'{error}')
-        
+
         def fetch(self, id):
             result = []
             index = 0
@@ -72,7 +75,7 @@ class Data:
                 self.cursor.execute('''SELECT * FROM modLogs''')
             except sqlite3.Error as error:
                 print(f'{error}')
-            
+
             for action, duration, reason, moderator, target, date in self.cursor.fetchall():
                 index += 1
                 print(index, action, duration, reason, moderator, target, date)
@@ -87,7 +90,7 @@ class Data:
                         "date": date
                     })
             return result
-        
+
         def update(self, id, **kwargs):
             duration = kwargs.get("duration", None)
             reason = kwargs.get("reason", None)
@@ -102,28 +105,29 @@ class Data:
                 return False
             return True
 
-    
-    class verificationEntry:
+    class VerificationEntry:
 
-        def __init__(self, Data):
-            self.Data = Data
-            self.connector = Data.connector
+        def __init__(self, data):
+            self.Data = data
+            self.connector = data.connector
             self.cursor = self.connector.cursor()
-        
+
         def insert(self, discordid, username, userid, date):
             try:
-                self.cursor.execute('''INSERT INTO verification (DISCORDID, USERNAME, USERID, DATE) VALUES (?, ?, ?, ?);''', (discordid, username, userid, date))
+                self.cursor.execute(
+                    '''INSERT INTO verification (DISCORDID, USERNAME, USERID, DATE) VALUES (?, ?, ?, ?);''',
+                    (discordid, username, userid, date))
                 self.connector.commit()
             except sqlite3.Error as error:
                 print(f'{error}')
-        
+
         def fetch(self, id):
             index = 0
             try:
                 self.cursor.execute('''SELECT * FROM verification''')
             except sqlite3.Error as error:
                 print(f'{error}')
-            
+
             for discordid, username, userid, date in self.cursor.fetchall():
                 index += 1
                 if int(discordid) == id:
@@ -134,7 +138,7 @@ class Data:
                         "userid": userid,
                         "date": date
                     }
-        
+
         def check_discordid(self, value):
             try:
                 self.cursor.execute('''SELECT * FROM verification''')
@@ -145,32 +149,32 @@ class Data:
             except sqlite3.Error as error:
                 print(f'{error}')
                 return False
-    
 
-    class taggingEntry:
+    class TaggingEntry:
 
-        def __init__(self, Data):
-            self.Data = Data
-            self.connector = Data.connector
+        def __init__(self, data):
+            self.Data = data
+            self.connector = data.connector
             self.cursor = self.connector.cursor()
-        
+
         def insert(self, channelid, name, content, date):
             try:
-                self.cursor.execute('''INSERT INTO tagging (CHANNELID, NAME, CONTENT, DATE) VALUES (?, ?, ?, ?);''', (channelid, name, content, date))
+                self.cursor.execute('''INSERT INTO tagging (CHANNELID, NAME, CONTENT, DATE) VALUES (?, ?, ?, ?);''',
+                                    (channelid, name, content, date))
                 self.connector.commit()
             except sqlite3.Error as error:
                 print(f'{error}')
-        
-        def fetch(self, indentifier, channelIdentifier):
+
+        def fetch(self, identifier, channelIdentifier):
             index = 0
             try:
                 self.cursor.execute('''SELECT * FROM tagging''')
             except sqlite3.Error as error:
                 print(f'{error}')
-            
+
             for channelid, name, content, date in self.cursor.fetchall():
                 index += 1
-                if name == indentifier and channelid == channelIdentifier:
+                if name == identifier and channelid == channelIdentifier:
                     return {
                         "index": index,
                         "channelid": channelid,
@@ -178,15 +182,15 @@ class Data:
                         "date": date
                     }
             return None
-        
-        def fetchAll(self, channelIdentifier):
+
+        def fetch_all(self, channelIdentifier):
             index = 0
             result = []
             try:
                 self.cursor.execute('''SELECT * FROM tagging''')
             except sqlite3.Error as error:
                 print(f'{error}')
-            
+
             for channelid, name, content, date in self.cursor.fetchall():
                 index += 1
                 if channelid == channelIdentifier:
@@ -198,7 +202,7 @@ class Data:
                         "date": date
                     })
             return result
-        
+
         def update(self, id, **kwargs):
             content = kwargs.get("content", None)
             date = kwargs.get("date", None)
@@ -210,12 +214,12 @@ class Data:
                 print(f'{error}')
                 return False
             return True
-        
-        def check_indentifier(self, indentifier):
+
+        def check_identifier(self, identifier):
             try:
                 self.cursor.execute('''SELECT * FROM tagging''')
                 for channelid, name, content, date in self.cursor.fetchall():
-                    if name == indentifier:
+                    if name == identifier:
                         return True
                 return False
             except sqlite3.Error as error:
