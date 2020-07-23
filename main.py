@@ -1,9 +1,9 @@
 import os
 
 from discord.ext import commands
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
-load_dotenv()
+#load_dotenv()
 
 # A list containing all cogs that we want to load
 available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.channels', 'cogs.moderation',
