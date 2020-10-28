@@ -14,16 +14,23 @@ available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.chan
 description = "Roblox API Server Documentation Bot"
 bot = commands.Bot(command_prefix='?', description=description, help_command=None)
 
-
+# Client Login
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}, id: {bot.user.id}")
     print("--")
 
+# Event Error
 @bot.event
 async def on_error(event, *args, **kwargs):
     channel = channel = bot.get_channel(770843267327721502)
     await channel.send(f'```Event: {event}\n py\n%s\n```{traceback.format_exc()}')
+
+# Command Error
+@bot.event
+async def on_command_error(message, error):
+    channel = channel = bot.get_channel(770843267327721502)
+    await channel.send(f'```**Command**\nError: {error}\nMessage: {message}\n py\n%s\n```{traceback.format_exc()}')
 
 if __name__ == '__main__':
 
