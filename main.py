@@ -1,6 +1,7 @@
 import os
 import traceback
 
+import discord
 from discord.ext import commands
 
 from dotenv import load_dotenv
@@ -24,13 +25,21 @@ async def on_ready():
 @bot.event
 async def on_error(event, *args, **kwargs):
     channel = channel = bot.get_channel(770843267327721502)
-    await channel.send(f'**Events**\nEvent: {event}\nTraceback: {traceback.format_exc()}')
+    emb = discord.Embed(color=discord.Color.red())
+    emb.set_author(name="Error (Event)", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+    emb.add_field(name="Event", value=event)
+    emb.add_field(name="Traceback", value=traceback.format_exc())
+    await channel.send(embed=emb)
 
 # Command Error
 @bot.event
 async def on_command_error(message, error):
     channel = channel = bot.get_channel(770843267327721502)
-    await channel.send(f'**Commands**\nError: {error}\nMessage: {message}\n')
+    emb = discord.Embed(color=discord.Color.red())
+    emb.set_author(name="Error (Commands)", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+    emb.add_field(name="Error", value=error)
+    emb.add_field(name="Message", value=message)
+    await channel.send(embed=emb)
 
 if __name__ == '__main__':
 
