@@ -24,13 +24,13 @@ async def on_ready():
 @bot.event
 async def on_error(event, *args, **kwargs):
     channel = channel = bot.get_channel(770843267327721502)
-    await channel.send(f'```Event: {event}\n py\n%s\n```{traceback.format_exc()}')
+    await channel.send(f'**Events**\nEvent: {event}\nTraceback: {traceback.format_exc()}')
 
 # Command Error
 @bot.event
 async def on_command_error(message, error):
     channel = channel = bot.get_channel(770843267327721502)
-    await channel.send(f'```**Command**\nError: {error}\nMessage: {message}\n py\n%s\n```{traceback.format_exc()}')
+    await channel.send(f'**Commands**\nError: {error}\nMessage: {message}\n')
 
 if __name__ == '__main__':
 
