@@ -39,7 +39,7 @@ async def on_command_error(ctx, error):
     emb.set_author(name="Error (Commands)", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     emb.add_field(name="Error", value=error, inline=False)
     emb.add_field(name="Command", value=ctx.command, inline=False)
-    emb.add_field(name="Message", value=ctx.message, inline=False)
+    emb.add_field(name="Message", value=ctx.message.content, inline=False)
     await channel.send(embed=emb)
 
 if __name__ == '__main__':
