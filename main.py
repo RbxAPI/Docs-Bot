@@ -22,7 +22,7 @@ async def on_ready():
 
 @bot.event
 async def on_error(event, *args, **kwargs):
-    channel = channel = bot.get_channel()
+    channel = channel = bot.get_channel(770843267327721502)
     await channel.send(f'```Event: {event}\n py\n%s\n```{traceback.format_exc()}')
 
 if __name__ == '__main__':
