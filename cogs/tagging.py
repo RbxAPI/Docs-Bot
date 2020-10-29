@@ -29,10 +29,9 @@ class Tagging(commands.Cog):
             if len(result) == 0:
                 await ctx.send(f'Tags in this channel "<#{ctx.message.channel.id}>" does not exist.')
                 return
-            emb = discord.Embed()
-            # emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {result["date"]}', icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+            emb = discord.Embed(title="Available tags for channel")
             for entry in result:
-                emb.add_field(name=f'{entry["index"]}', value=f';{entry["name"]}', inline=False)
+                emb.add_field(name=f'', value=f'({entry["index"]}) ?{entry["name"]}', inline=False)
 
             await ctx.send(embed=emb)
 
