@@ -26,13 +26,14 @@ class Tagging(commands.Cog):
             await ctx.send(embed=emb)
         else:
             result = db.taggingEntry.fetch_all(ctx.message.channel.id)
+            i = 0
             if len(result) == 0:
                 await ctx.send(f'Tags in this channel "<#{ctx.message.channel.id}>" does not exist.')
                 return
             emb = discord.Embed(title="Available tags for channel")
             for entry in result:
-                emb.add_field(name=f'Tag', value=f'({entry["index"]}) ?tag {entry["name"]}', inline=False)
-
+                emb.add_field(name=f'Tag', value=f'[{i}]({entry["index"]}) ?tag {entry["name"]}', inline=False)
+                i += 1
             await ctx.send(embed=emb)
 
     @tag.command()
