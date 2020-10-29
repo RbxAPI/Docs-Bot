@@ -70,6 +70,9 @@ if __name__ == '__main__':
     # Cached Main file
     generate('rewrite/main.py')
 
+    # Database Interface
+    generate('rewrite/cogs/data.py')
+
     # Cached Cogs
     generate('rewrite/cogs/maintenance.py')
     generate('rewrite/cogs/logging.py')
