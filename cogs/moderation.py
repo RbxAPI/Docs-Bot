@@ -14,11 +14,6 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_role("Moderator")
-    async def restart(self, ctx):
-        await self.bot.logout()
-
-    @commands.command()
-    @commands.has_role("Moderator")
     async def ping_library_developers(self, ctx, title, *, message):
         role = utils.get(ctx.guild.roles, name="Library Developer")
         await role.edit(mentionable=True)

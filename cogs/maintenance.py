@@ -17,7 +17,11 @@ class Maintenance(commands.Cog):
             await ctx.send(f'Error: {error}')
         else:
             await ctx.send(f'Reloaded: {name}')
-
+    
+    @commands.command()
+    @commands.has_role("Moderator")
+    async def restart(self, ctx):
+        await self.bot.logout()
 
 def setup(bot):
     bot.add_cog(Maintenance(bot))
