@@ -31,7 +31,7 @@ class Tagging(commands.Cog):
                 return
             emb = discord.Embed(title="Available tags for channel")
             for entry in result:
-                emb.add_field(name=f'\u200b', value=f'({entry["index"]}) ?{entry["name"]}', inline=False)
+                emb.add_field(name=f'Tag', value=f'({entry["index"]}) ?{entry["name"]}', inline=False)
 
             await ctx.send(embed=emb)
 
