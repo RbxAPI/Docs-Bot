@@ -14,3 +14,6 @@ fields:
 
   - name: Deprecated Endpoints list
     value: https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889
+    
+  - name: Hidden & Undocumented API list
+    value: https://devforum.roblox.com/t/a-list-of-hidden-and-undocumented-apis-endpoints/
