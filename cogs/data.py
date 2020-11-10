@@ -8,7 +8,6 @@ class Data:
     def __init__(self):
         self.connector = sqlite3.connect('storage.db')
         self.modEntry = self.ModEntry(self)
-        self.verificationEntry = self.VerificationEntry(self)
         self.taggingEntry = self.TaggingEntry(self)
 
         # Setup 'modLogs' Databases if isn't valid
