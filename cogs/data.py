@@ -26,19 +26,6 @@ class Data:
         except Exception as error:
             pass  # Database table is already created
 
-        # Setup 'verification' Database if isn't valid
-        try:
-            # verification table container
-            connector.execute('''CREATE TABLE verification (
-                DISCORDID BIGINT NOT NULL,
-                USERNAME TEXT NOT NULL,
-                USERID INTEGER NOT NULL,
-                DATE TEXT NOT NULL
-            );''')
-
-        except Exception as error:
-            pass  # Database table is already created
-
         # Setup 'tagging' Database if isn't valid
         try:
             # Tagging table container
@@ -104,51 +91,6 @@ class Data:
                 print(f'{error}')
                 return False
             return True
-
-    class VerificationEntry:
-
-        def __init__(self, data):
-            self.Data = data
-            self.connector = data.connector
-            self.cursor = self.connector.cursor()
-
-        def insert(self, discordid, username, userid, date):
-            try:
-                self.cursor.execute(
-                    '''INSERT INTO verification (DISCORDID, USERNAME, USERID, DATE) VALUES (?, ?, ?, ?);''',
-                    (discordid, username, userid, date))
-                self.connector.commit()
-            except sqlite3.Error as error:
-                print(f'{error}')
-
-        def fetch(self, id):
-            index = 0
-            try:
-                self.cursor.execute('''SELECT * FROM verification''')
-            except sqlite3.Error as error:
-                print(f'{error}')
-
-            for discordid, username, userid, date in self.cursor.fetchall():
-                index += 1
-                if int(discordid) == id:
-                    return {
-                        "index": index,
-                        "discordid": discordid,
-                        "username": username,
-                        "userid": userid,
-                        "date": date
-                    }
-
-        def check_discordid(self, value):
-            try:
-                self.cursor.execute('''SELECT * FROM verification''')
-                for discordid, username, userid, date in self.cursor.fetchall():
-                    if discordid == value:
-                        return True
-                return False
-            except sqlite3.Error as error:
-                print(f'{error}')
-                return False
 
     class TaggingEntry:
 
