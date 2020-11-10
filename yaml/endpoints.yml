@@ -1,5 +1,8 @@
 description: https://api.roblox.com/docs?useConsolidatedPage=true
 fields:
+  - name: Sanjay's API list
+    value: https://gist.github.com/Sanjay-B/32bd59cc6d9161e40acb694cf83d1ddf
+
   - name: BTRoblox API list
     value: https://github.com/AntiBoomz/BTRoblox/blob/master/README.md#api-docs
 
@@ -11,3 +14,6 @@ fields:
 
   - name: Deprecated Endpoints list
     value: https://devforum.roblox.com/t/official-list-of-deprecated-web-endpoints/62889
+    
+  - name: Hidden & Undocumented API list
+    value: https://devforum.roblox.com/t/a-list-of-hidden-and-undocumented-apis-endpoints/
