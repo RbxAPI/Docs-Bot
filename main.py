@@ -26,7 +26,7 @@ async def on_ready():
 # Event Error
 @bot.event
 async def on_error(event, *args, **kwargs):
-    channel = channel = bot.get_channel(770843267327721502)
+    channel = channel = bot.get_channel(os.getenv("ERROR_LOGS_CHANNEL"))
     emb = discord.Embed(color=discord.Color.red())
     emb.set_author(name="Error (Event)", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     emb.add_field(name="Event", value=event, inline=False)
@@ -36,7 +36,7 @@ async def on_error(event, *args, **kwargs):
 # Command Error
 @bot.event
 async def on_command_error(ctx, error):
-    channel = channel = bot.get_channel(770843267327721502)
+    channel = channel = bot.get_channel(os.getenv("ERROR_LOGS_CHANNEL"))
     emb = discord.Embed(color=discord.Color.red())
     emb.set_author(name="Error (Commands)", icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
     emb.add_field(name="Error", value=error, inline=False)
