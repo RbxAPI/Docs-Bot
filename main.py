@@ -8,8 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # A list containing all cogs that we want to load
-available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.channels', 'cogs.moderation',
-                  'cogs.verification', 'cogs.tagging']
+available_cogs = ['cogs.maintenance', 'cogs.logging', 'cogs.utility', 'cogs.channels', 'cogs.moderation', 'cogs.tagging']
+
+# Disabled Cogs
+# 'cogs.verification'
 
 # Bot Init
 description = "Roblox API Server Documentation Bot"
