@@ -1,16 +1,48 @@
 import os
+
 import discord
-from discord.ext import commands
 from discord import utils
+from discord.ext import commands
+
 from .data import Data
 
 db = Data()  # Initialize database
+
+
+def process_action(ctx, title, emb, member: discord.Member, msg, duration=None):
+    emb.add_field(name=title, value=f'{member.mention} ({member.id})', inline=False)
+    if duration:
+        emb.add_field(name='Duration', value=f'{duration}', inline=False)
+    emb.add_field(name="Reason", value=f'{msg}', inline=False)
+    emb.add_field(name="Moderator",
+                  value=ctx.message.author.mention,
+                  inline=False)
+    # Add data to database
+    # (Action, Duration, Reason, Moderator, Target, Date)
+    db.modEntry.insert(title, duration, msg, ctx.message.author.id, member.id,
+                       ctx.message.created_at)
+
+
+def prepare_action(ctx, name: str):
+    role = utils.get(ctx.guild.roles, name=name)
+    # Create default embed
+    emb = discord.Embed()
+    emb.set_author(name="Moderation",
+                   icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+    emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+    channel = ctx.message.channel
+    return role, emb, channel
 
 
 class Moderation(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.log_ch = None  # moderation-logs channel
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.log_ch = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))
 
     @commands.command()
     @commands.has_role("Moderator")
@@ -21,123 +53,54 @@ class Moderation(commands.Cog):
         await role.edit(mentionable=False)
 
     @commands.command()
-    @commands.has_role("Library Developer" or "Moderator")
+    @commands.has_any_role("Library Developer", "Moderator")
     async def mute(self, ctx, member: discord.Member, duration, *, message):
-        role = utils.get(ctx.guild.roles, name="Muted")
-        channel = ctx.message.channel
-        log_channel = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))  # moderation-logs channel
-
-        # Create default embed
-        emb = discord.Embed()
-        emb.set_author(name="Moderation",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+        role, emb, channel = prepare_action(ctx, 'Muted')
 
         # If Moderator invokes, mute from server and not just channel
-        if ((utils.get(ctx.guild.roles, name="Moderator") in ctx.message.author.roles)):
-            emb.add_field(name="Mute (Server)", value=f'{member.mention} ({member.id})', inline=False)
-            emb.add_field(name="Duration", value=f'{duration}', inline=False)
-            emb.add_field(name="Reason", value=f'{message}', inline=False)
-            emb.add_field(name="Moderator",
-                          value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                          inline=False)
+        if utils.get(ctx.guild.roles, name='Moderator') in ctx.message.author.roles:
+            process_action(ctx, 'Mute (Server)', emb, member, message, duration)
             await member.add_roles(role)
 
-            # Add data to database
-            # (Action, Duration, Reason, Moderator, Target, Date)
-            db.modEntry.insert("Mute (Server)", duration, message, ctx.message.author.id, member.id,
-                               ctx.message.created_at)
-
         # If Library Developer invokes, mute from channel and not server
-        elif ((utils.get(ctx.guild.roles, name="Library Developer") in ctx.message.author.roles) and (
+        if ((utils.get(ctx.guild.roles, name="Library Developer") in ctx.message.author.roles) and (
                 channel.category.name == "libraries" or channel.category.name == "frameworks")):
-            emb.add_field(name="Mute (Channel)", value=f'{member.mention} ({member.id})', inline=False)
-            emb.add_field(name="Duration", value=f'n/a', inline=False)
-            emb.add_field(name="Reason", value=f'n/a', inline=False)
-            emb.add_field(name="Moderator",
-                          value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                          inline=False)
+            process_action(ctx, 'Mute (Channel)', emb, member, 'n/a', None)
             await channel.set_permissions(member, read_messages=True, send_messages=False)
 
-            # Add data to database
-            # (Action, Duration, Reason, Moderator, Target, Date)
-            db.modEntry.insert("Mute (Channel)", duration, message, ctx.message.author.id, member.id,
-                               ctx.message.created_at)
-
         await ctx.message.add_reaction('👍')
-        await log_channel.send(embed=emb)
+        await self.log_ch.send(embed=emb)
 
     @commands.command()
-    @commands.has_role("Library Developer" or "Moderator")
+    @commands.has_any_role("Library Developer", "Moderator")
     async def unmute(self, ctx, member: discord.Member, *, message):
-        role = utils.get(ctx.guild.roles, name="Muted")
-        channel = ctx.message.channel
-        log_channel = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))  # moderation-logs channel
-
-        # Create default embed
-        emb = discord.Embed()
-        emb.set_author(name="Moderation",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+        role, emb, channel = prepare_action(ctx, 'Muted')
 
         # If Moderator invokes, unmute from server and not just channel
-        if ((utils.get(ctx.guild.roles, name="Moderator") in ctx.message.author.roles)):
-            emb.add_field(name="Unmute (Server)", value=f'{member.mention} ({member.id})', inline=False)
-            emb.add_field(name="Reason", value=f'{message}', inline=False)
-            emb.add_field(name="Moderator",
-                          value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                          inline=False)
+        if utils.get(ctx.guild.roles, name="Moderator") in ctx.message.author.roles:
+            process_action(ctx, 'Unmute (Server)', emb, member, message, None)
             await member.remove_roles(role)
-
-            # Add data to database
-            # (Action, Duration, Reason, Moderator, Target, Date)
-            db.modEntry.insert("Unmute (Server)", None, message, ctx.message.author.id, member.id,
-                               ctx.message.created_at)
 
         # If Library Developer invokes, unmute from channel and not server
         elif ((utils.get(ctx.guild.roles, name="Library Developer") in ctx.message.author.roles) and (
                 channel.category.name == "libraries" or channel.category.name == "frameworks")):
-            emb.add_field(name="Unmute (Channel)", value=f'{member.mention} ({member.id})', inline=False)
-            emb.add_field(name="Reason", value=f'{message}', inline=False)
-            emb.add_field(name="Moderator",
-                          value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                          inline=False)
+            process_action(ctx, 'Unmute (Channel)', emb, member, message, None)
             await channel.set_permissions(member, overwrite=None)
 
-            # Add data to database
-            # (Action, Duration, Reason, Moderator, Target, Date)
-            db.modEntry.insert("Unmute (Channel)", None, message, ctx.message.author.id, member.id,
-                               ctx.message.created_at)
-
         await ctx.message.add_reaction('👍')
-        await log_channel.send(embed=emb)
+        await self.log_ch.send(embed=emb)
 
     @commands.command()
-    @commands.has_role("Library Developer" or "Moderator")
+    @commands.has_role("Moderator")
     async def warn(self, ctx, member: discord.Member, *, message):
-        channel = ctx.message.channel
-        log_channel = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))  # moderation-logs channel
-
-        # Create default embed
-        emb = discord.Embed()
-        emb.set_author(name="Moderation",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
-        emb.add_field(name="Warn", value=f'{member.mention} ({member.id})', inline=False)
-        emb.add_field(name="Reason", value=f'{message}', inline=False)
-        emb.add_field(name="Moderator",
-                      value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                      inline=False)
-
-        # Add data to database
-        # (Action, Duration, Reason, Moderator, Target, Date)
-        db.modEntry.insert("Warn", None, message, ctx.message.author.id, member.id, ctx.message.created_at)
+        _, emb, channel = prepare_action(ctx, '')
+        process_action(ctx, 'Warn', emb, member, message, None)
 
         await ctx.message.add_reaction('👍')
-        await log_channel.send(embed=emb)
+        await self.log_ch.send(embed=emb)
 
     @commands.command()
-    @commands.has_role("Library Developer" or "Moderator")
+    @commands.has_role("Moderator")
     async def infractions(self, ctx, member: discord.Member):
         i = 0
 
@@ -149,14 +112,12 @@ class Moderation(commands.Cog):
             await ctx.send(f'User "{member.id}" has no infractions.')
             return
 
-        emb = discord.Embed()
-        emb.set_author(name="Moderation",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+        _, emb, _ = prepare_action(ctx, '')
 
         for case in query:
             emb.add_field(name=f'Case Number: {case["index"]}',
-                          value=f'Action: {case["action"]}\nDuration: {case["duration"]}\nUser: {case["target"]}\nReason: {case["reason"]}\nModerator: {case["moderator"]}\n Date: {case["date"]}',
+                          value=f'Action: {case["action"]}\nDuration: {case["duration"]}\nUser: {case["target"]}\n'
+                                f'Reason: {case["reason"]}\nModerator: {case["moderator"]}\n Date: {case["date"]}',
                           inline=False)
             if i >= 25:
                 await ctx.send(embed=emb)
@@ -184,37 +145,24 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_role("Moderator")
-    async def clean(self, ctx, amount, member: discord.Member = None):
-        log_channel = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))  # moderation-logs channel
-        emb = discord.Embed()
-        emb.set_author(name="Moderation",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+    async def clean(self, ctx, amount: int, member: discord.Member = None):
+        _, emb, ch = prepare_action(ctx, '')
+        emb.add_field(name='Message (Clean)', value=ch.mention, inline=False)
+        emb.add_field(name="Moderator", value=ctx.message.author.mention, inline=False)
 
-        # If specific memeber is not specified
-        if not member:
-            emb.add_field(name="Message (Clean)", value=f'<#{ctx.message.channel.id}>', inline=False)
-            emb.add_field(name="Amount", value=f'{amount}', inline=False)
-            emb.add_field(name="Moderator",
-                          value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                          inline=False)
-            await ctx.message.channel.purge(limit=int(amount) + 1)
-            await log_channel.send(embed=emb)
-            return
+        if member:
+            emb.insert_field_at(1, name="From", value=member.mention, inline=False)
 
-        # If specific member is specified
-        emb.add_field(name="Message (Clean)", value=f'<#{ctx.message.channel.id}>', inline=False)
-        emb.add_field(name="Amount", value=f'{amount}', inline=False)
-        emb.add_field(name="From", value=f'{member.mention} ({member.id})', inline=False)
-        emb.add_field(name="Moderator",
-                      value=f'{ctx.message.author}#{ctx.message.author.discriminator} ({ctx.message.author.id})',
-                      inline=False)
+            def is_member(message):
+                return message.author.id == member.id
 
-        def is_member(message):
-            return message.author.id == member.id
-
-        await ctx.message.channel.purge(limit=int(amount) + 1, check=is_member)
-        await log_channel.send(embed=emb)
+            msgs = await ctx.message.channel.purge(limit=amount+1, check=is_member)
+            amount = len(msgs) - 1
+        # If specific member is not specified
+        else:
+            await ctx.message.channel.purge(limit=amount+1)
+        emb.insert_field_at(1, name="Amount", value=str(amount), inline=False)
+        await self.log_ch.send(embed=emb)
 
 
 def setup(bot):
