@@ -100,7 +100,7 @@ class Moderation(commands.Cog):
         await self.log_ch.send(embed=emb)
 
     @commands.command()
-    @commands.has_role("Moderator")
+    @commands.has_any_role("Library Developer", "Moderator")
     async def infractions(self, ctx, member: discord.Member):
         i = 0
 
@@ -148,10 +148,9 @@ class Moderation(commands.Cog):
     async def clean(self, ctx, amount: int, member: discord.Member = None):
         _, emb, ch = prepare_action(ctx, '')
         emb.add_field(name='Message (Clean)', value=ch.mention, inline=False)
-        emb.add_field(name="Moderator", value=ctx.message.author.mention, inline=False)
 
         if member:
-            emb.insert_field_at(1, name="From", value=member.mention, inline=False)
+            emb.add_field(name="From", value=member.mention, inline=False)
 
             def is_member(message):
                 return message.author.id == member.id
@@ -162,6 +161,7 @@ class Moderation(commands.Cog):
         else:
             await ctx.message.channel.purge(limit=amount+1)
         emb.insert_field_at(1, name="Amount", value=str(amount), inline=False)
+        emb.add_field(name="Moderator", value=ctx.message.author.mention, inline=False)
         await self.log_ch.send(embed=emb)
 
 
