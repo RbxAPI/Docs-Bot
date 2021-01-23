@@ -45,6 +45,8 @@ class Utility(commands.Cog):
                          icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         for lang in yml["list"]:
             for lib in lang['libs']:
+                # It can only get users that have mutual servers  with the bot
+                # use fetch_user() if want to fetch users that don't have mutual servers
                 user = self.bot.get_user(lib["uid"])
                 embed.add_field(name=f'{lib["name"]}({lang["lang"]})', value=f'{lib["author"]}(@{user}) - {lib["url"]}')
         await ctx.send(embed=embed)
