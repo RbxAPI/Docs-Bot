@@ -6,25 +6,29 @@ import aiohttp
 session = aiohttp.ClientSession()
 
 
+async def check_doc_exists(ctx, doc, version):
+    base = f'https://{doc}.roblox.com'
+    async with session.get(f'{base}/docs/json/{version}') as r:
+        # throws ClientConnectException if base is not a valid subdomain e.g. xx.roblox.com
+        if r.status != 200:
+            await ctx.send("Sorry, those docs don't exist.")
+            return
+        else:
+            data = await r.json()
+            return data, discord.Embed(description=base)
+
+
+async def fetch_embed(filename: str):
+    with open(f'yaml/{filename}.yml') as file:
+        j = file.read()
+    d = yaml.load(j, Loader=yaml.FullLoader)
+    return discord.Embed.from_dict(d), d
+
+
 class Utility(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    async def fetch_embed(self, filename: str):
-        with open(f'yaml/{filename}.yml') as file:
-            j = file.read()
-        d = yaml.load(j, Loader=yaml.FullLoader)
-        return discord.Embed.from_dict(d), d
-
-    async def check_doc_exists(self, ctx, doc, version):
-        base = f'https://{doc}.roblox.com'
-        async with session.get(f'{base}/docs/json/{version}') as r:
-            if r.status != 200:
-                return await ctx.send("Sorry, those docs don't exist."), None
-            else:
-                data = await r.json()
-                return data, discord.Embed(description=base)
 
     @commands.command()
     async def ping(self, ctx):
@@ -40,7 +44,7 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=["libs", "libraries", "librarylist"])
     async def list(self, ctx):
-        embed, yml = await self.fetch_embed('libs')
+        embed, yml = await fetch_embed('libs')
         embed.set_author(name="Libraries",
                          icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         for lang in yml["list"]:
@@ -48,26 +52,26 @@ class Utility(commands.Cog):
                 # It can only get users that have mutual servers  with the bot
                 # use fetch_user() if want to fetch users that don't have mutual servers
                 user = self.bot.get_user(lib["uid"])
-                embed.add_field(name=f'{lib["name"]}({lang["lang"]})', value=f'{lib["author"]}(@{user}) - {lib["url"]}')
+                embed.add_field(name=f'{lib["name"]}({lang["lang"]})', value=f'{lib["author"]}({user.mention}) - {lib["url"]}')
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["codeblocks"])
     async def codeblock(self, ctx):
-        emb, _ = await self.fetch_embed('codeblock')
+        emb, _ = await fetch_embed('codeblock')
         emb.set_author(name="Codeblocks",
                        icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         await ctx.send(embed=emb)
 
     @commands.command(aliases=["cookies"])
     async def cookie(self, ctx):
-        emb, _ = await self.fetch_embed('cookie')
+        emb, _ = await fetch_embed('cookie')
         emb.set_author(name="Cookies",
                        icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         await ctx.send(embed=emb)
 
     @commands.command()
     async def docs(self, ctx, doc: str, version: str):
-        data, embed = await self.check_doc_exists(ctx, doc, version)
+        data, embed = await check_doc_exists(ctx, doc, version)
         if embed is None:
             return
         i = 0
@@ -87,7 +91,7 @@ class Utility(commands.Cog):
 
     @commands.command()
     async def doc(self, ctx, doc: str, version: str, *, args):
-        data, embed = await self.check_doc_exists(ctx, doc, version)
+        data, embed = await check_doc_exists(ctx, doc, version)
         if embed is None:
             return
         embed.set_author(name=f'{doc.capitalize()} {version}',
@@ -105,14 +109,14 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=["apisites", "robloxapi", "references", "reference"])
     async def api(self, ctx):
-        emb, _ = await self.fetch_embed('endpoints')
+        emb, _ = await fetch_embed('endpoints')
         emb.set_author(name="References",
                        icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         await ctx.send(embed=emb)
 
     @commands.command()
     async def resources(self, ctx):
-        emb, _ = await self.fetch_embed('resources')
+        emb, _ = await fetch_embed('resources')
         emb.set_author(name="Resources",
                        icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         await ctx.send(embed=emb)

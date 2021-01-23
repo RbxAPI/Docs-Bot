@@ -20,6 +20,11 @@ list:
         uid: 427040024513609729
         url: https://github.com/iranathan/robloxapi
 
+      - name: ro.py
+        author: jmkdev
+        uid: 197683356643753984
+        url: https://github.com/rbx-libdev/ro.py
+
   - lang: JavaScript
     libs:
       -  name: Roblox.js

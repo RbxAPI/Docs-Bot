@@ -17,10 +17,6 @@ class Logging(commands.Cog):
         if message.channel == channel:
             return
 
-        # Check Audit logs to find out who deleted the message
-        entries = await message.guild.audit_logs(limit=None, action=discord.AuditLogAction.message_delete).flatten()
-        base_entry = entries[0]
-
         emb = discord.Embed()
         emb.set_author(name="Message (Delete)",
                        icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
@@ -42,8 +38,8 @@ class Logging(commands.Cog):
                        icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
         emb.set_footer(text=f'{before.author}\t\t\t\t\t\tTimestamp: {after.created_at}',
                        icon_url=before.author.avatar_url)
-        emb.add_field(name="Before", value=(before.content), inline=False)
-        emb.add_field(name="After", value=(after.content), inline=False)
+        emb.add_field(name="Before", value=before.content, inline=False)
+        emb.add_field(name="After", value=after.content, inline=False)
         await channel.send(embed=emb)
 
 

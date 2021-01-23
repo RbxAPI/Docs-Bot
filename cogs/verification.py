@@ -44,7 +44,8 @@ class Verification(commands.Cog):
         else:
             channel_dm = await member.create_dm()
             await channel_dm.send(
-                f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent to your dms. Please verify w/ ``?verify`` in our server.')
+                f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent to '
+                f'your dms. Please verify w/ ``?verify`` in our server.')
 
     @commands.command()
     async def verify(self, ctx, username: str = None, *, keyPhrase: str = None):
@@ -82,7 +83,8 @@ class Verification(commands.Cog):
                 await channel.send(
                     f'Here is your passphrase to verify. Please place this string of text (without quotes) "{temp_passphrase}" in your roblox profile blurb.')
                 await ctx.send(
-                    f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent to your dms. Please reverify w/ ``?verify <username> <keyphrase>``')
+                    f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent '
+                    f'to your dms. Please reverify w/ ``?verify <username> <keyphrase>``')
 
         # Custom Verify (Custom solution)
         elif username and keyPhrase:
