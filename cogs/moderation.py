@@ -71,7 +71,7 @@ class Moderation(commands.Cog):
         # If Library Developer invokes, mute from channel and not server
         if ((utils.get(ctx.guild.roles, name="Library Developer") in ctx.message.author.roles) and (
                 channel.category.name == "libraries" or channel.category.name == "frameworks")):
-            process_action(ctx, 'Mute (Channel)', emb, member, 'n/a', None)
+            process_action(ctx, 'Mute (Channel)', emb, member, 'n/a')
             await channel.set_permissions(member, read_messages=True, send_messages=False)
 
         await ctx.message.add_reaction('👍')
@@ -84,13 +84,13 @@ class Moderation(commands.Cog):
 
         # If Moderator invokes, unmute from server and not just channel
         if utils.get(ctx.guild.roles, name="Moderator") in ctx.message.author.roles:
-            process_action(ctx, 'Unmute (Server)', emb, member, message, None)
+            process_action(ctx, 'Unmute (Server)', emb, member, message)
             await member.remove_roles(role)
 
         # If Library Developer invokes, unmute from channel and not server
         elif ((utils.get(ctx.guild.roles, name="Library Developer") in ctx.message.author.roles) and (
                 channel.category.name == "libraries" or channel.category.name == "frameworks")):
-            process_action(ctx, 'Unmute (Channel)', emb, member, message, None)
+            process_action(ctx, 'Unmute (Channel)', emb, member, message)
             await channel.set_permissions(member, overwrite=None)
 
         await ctx.message.add_reaction('👍')
@@ -100,7 +100,7 @@ class Moderation(commands.Cog):
     @commands.has_role("Moderator")
     async def warn(self, ctx, member: discord.Member, *, message):
         _, emb, channel = prepare_action(ctx, '')
-        process_action(ctx, 'Warn', emb, member, message, None)
+        process_action(ctx, 'Warn', emb, member, message)
 
         await ctx.message.add_reaction('👍')
         await self.log_ch.send(embed=emb)
