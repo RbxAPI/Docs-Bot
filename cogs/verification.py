@@ -7,6 +7,8 @@ from .data import Data
 import random
 from datetime import datetime
 
+from .moderation import footer_embed
+
 db = Data()  # Initialize database
 
 available_words = ["apple", "orange", "pear", "boat", "ship", "car", "plane", "train", "turtle", "cow", "frog",
@@ -113,10 +115,7 @@ class Verification(commands.Cog):
             await ctx.send(f'User "{member.id}" is not verified.')
             return
 
-        emb = discord.Embed()
-        emb.set_author(name="Information",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+        emb = footer_embed(ctx.message, 'Information')
         emb.add_field(name=f'**{member.display_name}**',
                       value=f'Discord Id: {query["discordid"]}\nUsername: {query["username"]}\nUser Id: {query["userid"]}\nDate: {query["date"]}',
                       inline=False)

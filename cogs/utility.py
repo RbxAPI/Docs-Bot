@@ -3,6 +3,8 @@ from discord.ext import commands
 import yaml
 import aiohttp
 
+from cogs.moderation import default_embed
+
 session = aiohttp.ClientSession()
 
 
@@ -18,11 +20,13 @@ async def check_doc_exists(ctx, doc, version):
             return data, discord.Embed(description=base)
 
 
-async def fetch_embed(filename: str):
+async def fetch_embed(filename: str, author: str):
     with open(f'yaml/{filename}.yml') as file:
         j = file.read()
     d = yaml.load(j, Loader=yaml.FullLoader)
-    return discord.Embed.from_dict(d), d
+    emb = discord.Embed.from_dict(d)
+    emb.set_author(name=author, icon_url='https://avatars1.githubusercontent.com/u/42101452?s=200&v=4')
+    return emb, d
 
 
 class Utility(commands.Cog):
@@ -35,38 +39,29 @@ class Utility(commands.Cog):
         resp = await ctx.send('Pong! Loading...', delete_after=1.0)
         diff = resp.created_at - ctx.message.created_at
         totalms = 1000 * diff.total_seconds()
-        emb = discord.Embed()
-        emb.set_author(name="Pong!",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.add_field(name="Message time", value=f"{totalms}ms")
-        emb.add_field(name="API latency", value=f"{(1000 * self.bot.latency):.1f}ms")
+        emb = default_embed('Pong!')
+        emb.add_field(name="Message response time", value=f"{totalms}ms")  # Time for receive+process+reply cmd
+        emb.add_field(name="API latency", value=f"{(1000 * self.bot.latency):.1f}ms")  # Official heartbeat latency
         await ctx.send(embed=emb)
 
     @commands.command(aliases=["libs", "libraries", "librarylist"])
     async def list(self, ctx):
-        embed, yml = await fetch_embed('libs')
-        embed.set_author(name="Libraries",
-                         icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        embed, yml = await fetch_embed('libs', 'Libraries')
         for lang in yml["list"]:
             for lib in lang['libs']:
-                # It can only get users that have mutual servers  with the bot
-                # use fetch_user() if want to fetch users that don't have mutual servers
-                user = self.bot.get_user(lib["uid"])
-                embed.add_field(name=f'{lib["name"]}({lang["lang"]})', value=f'{lib["author"]}({user.mention}) - {lib["url"]}')
+                user = await self.bot.fetch_user(lib['uid'])
+                embed.add_field(name=f'{lib["name"]}({lang["lang"]})',
+                                value=f'{lib["author"]}({user.mention}) - {lib["url"]}')
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["codeblocks"])
     async def codeblock(self, ctx):
-        emb, _ = await fetch_embed('codeblock')
-        emb.set_author(name="Codeblocks",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        emb, _ = await fetch_embed('codeblock', 'Codeblocks')
         await ctx.send(embed=emb)
 
     @commands.command(aliases=["cookies"])
     async def cookie(self, ctx):
-        emb, _ = await fetch_embed('cookie')
-        emb.set_author(name="Cookies",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        emb, _ = await fetch_embed('cookie', 'Cookies')
         await ctx.send(embed=emb)
 
     @commands.command()
@@ -76,7 +71,7 @@ class Utility(commands.Cog):
             return
         i = 0
         embed.set_author(name=f'{doc.capitalize()} {version}',
-                         icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+                         icon_url="https://avatars1.githubusercontent.com/u/42101452?s=200&v=4")
         for path in data['paths']:
             for method in data['paths'][path]:
                 docs = data['paths'][path][method]
@@ -95,7 +90,7 @@ class Utility(commands.Cog):
         if embed is None:
             return
         embed.set_author(name=f'{doc.capitalize()} {version}',
-                         icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+                         icon_url="https://avatars1.githubusercontent.com/u/42101452?s=200&v=4")
         embed.set_footer(text=f'Keyword(s): {args}')
         for path in data['paths']:
             for method in data['paths'][path]:
@@ -109,16 +104,12 @@ class Utility(commands.Cog):
 
     @commands.command(aliases=["apisites", "robloxapi", "references", "reference"])
     async def api(self, ctx):
-        emb, _ = await fetch_embed('endpoints')
-        emb.set_author(name="References",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        emb, _ = await fetch_embed('endpoints', 'References')
         await ctx.send(embed=emb)
 
     @commands.command()
     async def resources(self, ctx):
-        emb, _ = await fetch_embed('resources')
-        emb.set_author(name="Resources",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        emb, _ = await fetch_embed('resources', 'Resources')
         await ctx.send(embed=emb)
 
 

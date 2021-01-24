@@ -21,14 +21,14 @@ class Tagging(commands.Cog):
                 return
             emb = discord.Embed()
             emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {result["date"]}',
-                           icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+                           icon_url='https://avatars1.githubusercontent.com/u/42101452?s=200&v=4')
             emb.add_field(name=f'{name}', value=result["content"], inline=False)
             await ctx.send(embed=emb)
         else:
             result = db.taggingEntry.fetch_all(ctx.message.channel.id)
             i = 0
             if len(result) == 0:
-                await ctx.send(f'Tags in this channel "<#{ctx.message.channel.id}>" does not exist.')
+                await ctx.send(f'Tags in this channel "{ctx.channel.mention}" does not exist.')
                 return
             emb = discord.Embed(title="Available tags for channel")
             for entry in result:

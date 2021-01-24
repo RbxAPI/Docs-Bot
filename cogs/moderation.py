@@ -9,6 +9,27 @@ from .data import Data
 db = Data()  # Initialize database
 
 
+# Probably should create a EmbedFactory class in the future.
+def default_embed(author: str, **kwargs):
+    emb = discord.Embed(**kwargs)
+    emb.set_author(name=author, icon_url="https://avatars1.githubusercontent.com/u/42101452?s=200&v=4")
+    return emb
+
+
+def footer_embed(message, author: str, icon_url: str = ''):
+    emb = default_embed(author)
+    emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {message.created_at}', icon_url=icon_url)
+    return emb
+
+
+def prepare_action(ctx, name: str):
+    role = utils.get(ctx.guild.roles, name=name)
+    # Create default embed
+    emb = footer_embed(ctx.message, 'Moderation')
+    channel = ctx.message.channel
+    return role, emb, channel
+
+
 def process_action(ctx, title, emb, member: discord.Member, msg, duration=None):
     emb.add_field(name=title, value=f'{member.mention} ({member.id})', inline=False)
     if duration:
@@ -23,26 +44,11 @@ def process_action(ctx, title, emb, member: discord.Member, msg, duration=None):
                        ctx.message.created_at)
 
 
-def prepare_action(ctx, name: str):
-    role = utils.get(ctx.guild.roles, name=name)
-    # Create default embed
-    emb = discord.Embed()
-    emb.set_author(name="Moderation",
-                   icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-    emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
-    channel = ctx.message.channel
-    return role, emb, channel
-
-
 class Moderation(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.log_ch = None  # moderation-logs channel
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        self.log_ch = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))
+        self.log_ch: discord.TextChannel = self.bot.get_channel(int(os.getenv("MODERATION_LOGS_CHANNEL")))
 
     @commands.command()
     @commands.has_role("Moderator")
@@ -155,11 +161,11 @@ class Moderation(commands.Cog):
             def is_member(message):
                 return message.author.id == member.id
 
-            msgs = await ctx.message.channel.purge(limit=amount+1, check=is_member)
+            msgs = await ctx.message.channel.purge(limit=amount + 1, check=is_member)
             amount = len(msgs) - 1
         # If specific member is not specified
         else:
-            await ctx.message.channel.purge(limit=amount+1)
+            await ctx.message.channel.purge(limit=amount + 1)
         emb.insert_field_at(1, name="Amount", value=str(amount), inline=False)
         emb.add_field(name="Moderator", value=ctx.message.author.mention, inline=False)
         await self.log_ch.send(embed=emb)
