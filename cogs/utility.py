@@ -49,7 +49,9 @@ class Utility(commands.Cog):
         embed, yml = await fetch_embed('libs', 'Libraries')
         for lang in yml["list"]:
             for lib in lang['libs']:
-                user = await self.bot.fetch_user(lib['uid'])
+                # It can only get users that have mutual servers  with the bot
+                # use fetch_user() if want to fetch users that don't have mutual servers
+                user = self.bot.get_user(lib["uid"])
                 embed.add_field(name=f'{lib["name"]}({lang["lang"]})',
                                 value=f'{lib["author"]}({user.mention}) - {lib["url"]}')
         await ctx.send(embed=embed)
