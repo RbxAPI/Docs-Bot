@@ -34,7 +34,7 @@ async def on_ready():
 # Event Error. the args are required
 @bot.event
 async def on_error(event, *args, **kwargs):
-    channel = bot.get_channel(770843267327721502)
+    channel = bot.get_channel(int(os.getenv('ERROR_LOGS_CHANNEL')))
     emb = default_embed('Error (Event)', color=discord.Color.red())
     emb.add_field(name="Event", value=event, inline=False)
     emb.add_field(name="Traceback", value=traceback.format_exc(), inline=False)
@@ -44,7 +44,7 @@ async def on_error(event, *args, **kwargs):
 # Command Error
 @bot.event
 async def on_command_error(ctx, error):
-    channel = bot.get_channel(770843267327721502)
+    channel = bot.get_channel(int(os.getenv('ERROR_LOGS_CHANNEL')))
     emb = default_embed('Error (Commands)', color=discord.Color.red())
     emb.add_field(name="Error", value=error, inline=False)
     emb.add_field(name="Command", value=ctx.command, inline=False)
