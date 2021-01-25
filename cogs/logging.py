@@ -3,7 +3,7 @@ import os
 from discord import TextChannel
 from discord.ext import commands
 
-from EmbedFactory import footer_embed
+from embed import footer_embed
 
 
 class Logging(commands.Cog):

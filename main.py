@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from dotenv import load_dotenv
 
-from EmbedFactory import default_embed
+from embed import default_embed
 
 load_dotenv()
 

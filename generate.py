@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     # Cached Main file
     generate('rewrite/main.py')
-    generate('rewrite/EmbedFactory.py')
+    generate('rewrite/embed.py')
 
     # Database Interface
     generate('rewrite/cogs/data.py')

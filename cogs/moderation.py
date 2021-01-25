@@ -4,7 +4,7 @@ import discord
 from discord import utils
 from discord.ext import commands
 
-import EmbedFactory
+import embed
 from .data import Data
 
 db = Data()  # Initialize database
@@ -13,7 +13,7 @@ db = Data()  # Initialize database
 def prepare_action(ctx, name: str):
     role = utils.get(ctx.guild.roles, name=name)
     # Create default embed
-    emb = EmbedFactory.footer_embed(ctx.message, 'Moderation')
+    emb = embed.footer_embed(ctx.message, 'Moderation')
     channel = ctx.message.channel
     return role, emb, channel
 
