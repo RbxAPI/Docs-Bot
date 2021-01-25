@@ -45,16 +45,25 @@ class Utility(commands.Cog):
         await ctx.send(embed=emb)
 
     @commands.command(aliases=["libs", "libraries", "librarylist"])
-    async def list(self, ctx):
-        embed, yml = await fetch_embed('libs', 'Libraries')
-        for lang in yml["list"]:
-            for lib in lang['libs']:
-                # It can only get users that have mutual servers  with the bot
-                # use fetch_user() if want to fetch users that don't have mutual servers
-                user = self.bot.get_user(lib["uid"])
-                embed.add_field(name=f'{lib["name"]}({lang["lang"]})',
-                                value=f'{lib["author"]}({user.mention}) - {lib["url"]}')
-        await ctx.send(embed=embed)
+    async def list(self, ctx, lang: str):
+        _, yml = await fetch_embed('libs', 'Libraries')
+        libs = next(
+            (lang_lib for lang_lib in yml['list'] for lang_str in lang_lib['lang'] if lang.lower() == lang_str.lower()),
+            None)
+        if libs:
+            emb = default_embed(f'{libs["lang"][0]} libraries/frameworks')
+            for lib in libs['libs']:
+                # It can only get users/channels that have mutual servers  with the bot
+                # use fetch_xx() if want to fetch users/channels that don't have mutual servers
+                ch = self.bot.get_channel(lib['chid'])
+                value = f"[Repo]({lib['url']}) {ch.mention} |"
+                for uid in lib['uid']:
+                    user = self.bot.get_user(uid)
+                    value += f' {user.mention}'
+                emb.add_field(name=lib['name'], value=value, inline=False)
+            await ctx.send(embed=emb)
+        else:
+            await ctx.send('Unknown language.')
 
     @commands.command(aliases=["codeblocks"])
     async def codeblock(self, ctx):
