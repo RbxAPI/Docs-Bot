@@ -4,7 +4,7 @@ import discord.emoji
 from discord import utils
 from discord.ext import commands
 
-from cogs.moderation import default_embed
+from EmbedFactory import default_embed
 
 
 class Channels(commands.Cog):

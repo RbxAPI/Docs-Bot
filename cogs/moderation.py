@@ -4,28 +4,16 @@ import discord
 from discord import utils
 from discord.ext import commands
 
+import EmbedFactory
 from .data import Data
 
 db = Data()  # Initialize database
 
 
-# Probably should create a EmbedFactory class in the future.
-def default_embed(author: str, **kwargs):
-    emb = discord.Embed(**kwargs)
-    emb.set_author(name=author, icon_url="https://avatars1.githubusercontent.com/u/42101452?s=200&v=4")
-    return emb
-
-
-def footer_embed(message, author: str, icon_url: str = ''):
-    emb = default_embed(author)
-    emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {message.created_at}', icon_url=icon_url)
-    return emb
-
-
 def prepare_action(ctx, name: str):
     role = utils.get(ctx.guild.roles, name=name)
     # Create default embed
-    emb = footer_embed(ctx.message, 'Moderation')
+    emb = EmbedFactory.footer_embed(ctx.message, 'Moderation')
     channel = ctx.message.channel
     return role, emb, channel
 

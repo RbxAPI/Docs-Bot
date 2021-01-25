@@ -3,7 +3,7 @@ from discord.ext import commands
 import yaml
 import aiohttp
 
-from cogs.moderation import default_embed
+from EmbedFactory import default_embed
 
 session = aiohttp.ClientSession()
 

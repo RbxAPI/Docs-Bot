@@ -7,7 +7,7 @@ from .data import Data
 import random
 from datetime import datetime
 
-from .moderation import footer_embed
+from EmbedFactory import footer_embed
 
 db = Data()  # Initialize database
 
