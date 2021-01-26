@@ -17,6 +17,8 @@ class Channels(commands.Cog):
         ch = channel if channel else ctx.channel
         return utils.find(lambda r: r.name.startswith(ch.name.split('_')[1]), ctx.guild.roles)
 
+    '''
+    # Commented out. Insights competition among the libraries. Will re-evaluate usage.
     @commands.command()
     async def leaderboard(self, ctx):
         roles = [(r.name, len(r.members)) for r in ctx.guild.roles if 'news' in r.name]
@@ -25,6 +27,7 @@ class Channels(commands.Cog):
         for i, r in enumerate(roles):
             embed.add_field(name=f"{i + 1}. {r[0]}", value=f"**Subscribers:** {r[1]}")
         await ctx.send(embed=embed)
+    '''
 
     @commands.command()
     async def subscribe(self, ctx, channel: discord.TextChannel = None):
