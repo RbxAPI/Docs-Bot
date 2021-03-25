@@ -7,6 +7,8 @@ from .data import Data
 import random
 from datetime import datetime
 
+from embed import footer_embed
+
 db = Data()  # Initialize database
 
 available_words = ["apple", "orange", "pear", "boat", "ship", "car", "plane", "train", "turtle", "cow", "frog",
@@ -44,7 +46,8 @@ class Verification(commands.Cog):
         else:
             channel_dm = await member.create_dm()
             await channel_dm.send(
-                f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent to your dms. Please verify w/ ``?verify`` in our server.')
+                f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent to '
+                f'your dms. Please verify w/ ``?verify`` in our server.')
 
     @commands.command()
     async def verify(self, ctx, username: str = None, *, keyPhrase: str = None):
@@ -82,7 +85,8 @@ class Verification(commands.Cog):
                 await channel.send(
                     f'Here is your passphrase to verify. Please place this string of text (without quotes) "{temp_passphrase}" in your roblox profile blurb.')
                 await ctx.send(
-                    f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent to your dms. Please reverify w/ ``?verify <username> <keyphrase>``')
+                    f'It appears that you are not verified with RoVer or our own database. A keyphrase has been sent '
+                    f'to your dms. Please reverify w/ ``?verify <username> <keyphrase>``')
 
         # Custom Verify (Custom solution)
         elif username and keyPhrase:
@@ -111,10 +115,7 @@ class Verification(commands.Cog):
             await ctx.send(f'User "{member.id}" is not verified.')
             return
 
-        emb = discord.Embed()
-        emb.set_author(name="Information",
-                       icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
-        emb.set_footer(text=f'\t\t\t\t\t\t\tTimestamp: {ctx.message.created_at}')
+        emb = footer_embed(ctx.message, 'Information')
         emb.add_field(name=f'**{member.display_name}**',
                       value=f'Discord Id: {query["discordid"]}\nUsername: {query["username"]}\nUser Id: {query["userid"]}\nDate: {query["date"]}',
                       inline=False)

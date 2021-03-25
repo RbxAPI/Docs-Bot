@@ -1,8 +1,10 @@
 import os
-import discord
-from discord.ext import commands
-from discord import utils
+
 import discord.emoji
+from discord import utils
+from discord.ext import commands
+
+from embed import default_embed
 
 
 class Channels(commands.Cog):
@@ -21,9 +23,7 @@ class Channels(commands.Cog):
     async def leaderboard(self, ctx):
         roles = [(r.name, len(r.members)) for r in ctx.guild.roles if 'news' in r.name]
         roles.sort(key=lambda x: x[1], reverse=True)
-        embed = discord.Embed()
-        embed.set_author(name="Subscriber Leaderboards",
-                         icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        embed = default_embed('Subscriber Leaderboards')
         for i, r in enumerate(roles):
             embed.add_field(name=f"{i + 1}. {r[0]}", value=f"**Subscribers:** {r[1]}")
         await ctx.send(embed=embed)
@@ -56,11 +56,9 @@ class Channels(commands.Cog):
     async def poll(self, ctx, *, args):
         role = self.get_news_role(ctx)
         await role.edit(mentionable=True)
-        await ctx.send(f'{role.mention}')
+        await ctx.send(role.mention)
         await role.edit(mentionable=False)
-        embed = discord.Embed(Title="Poll")
-        embed.set_author(name="Poll",
-                         icon_url="https://cdn.discordapp.com/attachments/336577284322623499/683028692133216300/ac6e275e1f638f4e19af408d8440e1d1.png")
+        embed = default_embed('Poll', title='Poll')
         hasEmojis = ((args.find('[') and args.find(']')) != -1)  # Regex?
 
         if hasEmojis:

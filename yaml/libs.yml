@@ -1,112 +1,74 @@
-description: General library list and frameworks specific to this server
-thumbnail:
-  url: https://avatars1.githubusercontent.com/u/42101452?s=200&v=4
-
 list:
-  - lang: Python
+  - lang: [Python, py]
     libs:
       - name: Pyblox
-        author: Sanjay-B
-        uid: 179201489363795968
+        dev: https://github.com/Sanjay-B
+        uid:  [179201489363795968]
+        chid: 332928926857035776
         url: https://github.com/RbxAPI/Pyblox
 
-      - name: Robloxlib
-        author: NoahCristino
-        uid: 283667489471332354
-        url: https://github.com/NoahCristino/robloxlib
+      - name: ro.py
+        dev: https://github.com/jmk-developer
+        uid: [197683356643753984, 427040024513609729]
+        chid: 785226119602241536
+        url: https://github.com/rbx-libdev/ro.py
 
-      - name: RobloxAPI
-        author: iranathan
-        uid: 427040024513609729
-        url: https://github.com/iranathan/robloxapi
-
-  - lang: JavaScript
+  - lang: [JavaScript, js]
     libs:
-      -  name: Roblox.js
-         author: sentanos
-         uid: 137543748434395136
-         url: https://github.com/sentanos/roblox-js
-
       - name: Nodeblox.js
-        author: suufi
-        uid: 88410718314971136
+        uid: [88410718314971136]
+        chid: 429453333640773638
         url: https://github.com/suufi/noblox.js
 
       - name: Bloxy
-        author: MartinRBX
-        uid: 211122613429338112
+        uid: [211122613429338112]
+        chid: 465546625406730262
         url: https://github.com/MartinRBX/bloxy
 
-  - lang: TypeScript
-    libs:
-      - name: TSBlox
-        author: Dionysusnu
-        uid: 214262712753061889
-        url: https://github.com/Dionysusnu/tsblox
+      - name: rbxdatastoreservice
+        uid: [360078081224081409]
+        chid: 798107527467368478
+        url: https://github.com/nsg-mfd/RbxDataStoreService
 
-  - lang: Lua
+  - lang: [Lua]
     libs:
-      - name: RobloxCommunication
-        author: CrescentCode
-        uid: 131823956255571969
-        url: https://github.com/CrescentCode/RobloxCommunication
+      - name: rbx.lua
+        uid: [335248825880936448]
+        chid: 771903890144100353
+        url: https://github.com/iiToxicity/rbx.lua
 
       - name: RoStrap
-        author: RoStrap
-        uid: 127858186530062336
+        uid: [127858186530062336]
+        chid: 336144578619113483
         url: https://github.com/RoStrap/RoStrapUI
 
       - name: Overture
-        author: devSparkle
-        uid: 196716483567419403
+        uid: [196716483567419403]
+        chid: 564233540095705089
         url: https://github.com/devSparkle/Overture
 
-      - name: MaterialR
-        author: fivefactor
-        uid: 609167831950557348
-        url: https://devforum.roblox.com/t/materialr-ui-framework/330396
+      - name: MaterialPlus
+        uid: [609167831950557348]
+        chid: 611760560853352473
+        url: https://devforum.roblox.com/t/materialplus-documentation/588828
 
-  - lang: C#
+  - lang: [C#, csharp, cs]
     libs:
       - name: RobloxAPI
-        author: gamenew09
-        uid: 125802100373454848
+        uid: [125802100373454848]
+        chid: 336634936025022475
         url: https://github.com/gamenew09/RobloxAPI
 
-  - lang: PHP
+  - lang: [Java, jar]
     libs:
-      - name: Roblophp
-        author: WebDevTrop
-        uid: 217971702733209600
-        url: https://github.com/WebDevTrop/roblophp
-
-  - lang: Java
-    libs:
-      - name: Javablox
-        author: Pythonic-Rainbow
-        uid: 264756129916125184
-        url: https://github.com/RbxAPI/Javablox
-
       - name: Roblox4j
-        author: PizzaCrust
-        uid: 185697212976726018
+        uid: [185697212976726018]
+        chid: 430023138550611974
         url: https://github.com/PizzaCrust/Roblox4j
 
-  - lang: Kotlin
-    libs:
-      - name: KotlinRoblox
-        author: PizzaCrust
-        uid: 185697212976726018
-        url: https://github.com/PizzaCrust/KotlinRoblox
-
-      - name: Roblox.kt
-        author: FreeLineTM
-        uid: 179256560139108352
-        url: https://github.com/FreeLineTM/roblox.kt
-
-  - lang: C++
+  - lang: [C++, cpp]
     libs:
       - name: Cblox
-        author: Meqolo
-        uid: 298012370217992192
+        uid: [298012370217992192]
+        chid: 571877645797687355
         url: https://github.com/Meqolo/cblox
